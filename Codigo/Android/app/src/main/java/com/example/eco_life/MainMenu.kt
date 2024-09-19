@@ -42,8 +42,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.eco_life.CalculatorMenu
-import com.example.eco_life.PlacesMenu
+import com.example.eco_life.VideogameMenu
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +55,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+//Barra de navegación
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
@@ -66,11 +66,12 @@ fun Navigation() {
         NavHost(
             navController = navController,
             startDestination = "main_menu",
-            modifier = Modifier.padding(innerPadding)  // Apply the padding here
+            modifier = Modifier.padding(innerPadding)
         ) {
             composable("main_menu") { StartMenu() }
             composable("calculator_menu") { CalculatorMenu() }
             composable("places_menu") { PlacesMenu() }
+            composable("videogame") { VideogameMenu() }
         }
     }
 }
@@ -80,7 +81,8 @@ fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
         NavigationItem.MainMenu,
         NavigationItem.CalculatorMenu,
-        NavigationItem.PlacesMenu
+        NavigationItem.PlacesMenu,
+        NavigationItem.VideogameMenu
     )
     BottomNavigation(
         backgroundColor = Color.Green,
@@ -105,9 +107,10 @@ fun BottomNavigationBar(navController: NavHostController) {
 }
 
 sealed class NavigationItem(var route: String, var icon: ImageVector, var title: String) {
-    object MainMenu : NavigationItem("main_menu", Icons.Default.Home, "Main Menu")
-    object CalculatorMenu : NavigationItem("calculator_menu", Icons.Default.Add, "Calculator")
-    object PlacesMenu : NavigationItem("places_menu", Icons.Default.Place, "Places")
+    object MainMenu : NavigationItem("main_menu", Icons.Default.Home, "Menú Principal")
+    object CalculatorMenu : NavigationItem("calculator_menu", Icons.Default.Add, "Calculadora")
+    object PlacesMenu : NavigationItem("places_menu", Icons.Default.Place, "Lugares")
+    object VideogameMenu : NavigationItem("videogame", Icons.Default.Face, "Videojuego")
 }
 
 //Función para crear el "Carrusel" de Consejos
