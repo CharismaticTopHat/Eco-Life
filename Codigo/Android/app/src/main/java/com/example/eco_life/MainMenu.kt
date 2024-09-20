@@ -13,9 +13,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -36,7 +44,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntSize
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -118,6 +129,7 @@ sealed class NavigationItem(var route: String, var icon: ImageVector, var title:
 fun TextCarousel() {
     //Variables de funcionamiento
     var currentIndex by remember { mutableIntStateOf(0) }
+    var size by remember { mutableStateOf(IntSize.Zero) }
     //Valores de recomendaciones
     val items = listOf(
         "Desconectar electrodomésticos",
@@ -138,6 +150,7 @@ fun TextCarousel() {
     val beige = Color(230,230,230)
     val headerGreen = Color(17,109,29)
     val rowHeight = 80.dp
+    val rowHeightPartial = 48.dp
     val buttonCornerRadius = 12.dp
 
     Row(
@@ -171,22 +184,33 @@ fun TextCarousel() {
         LazyRow(
             modifier = Modifier
                 .weight(1f)
-                .height(rowHeight)
-                .background(beige),
+                .background(beige)
+                .onSizeChanged {
+                    size = it
+                },
             horizontalArrangement = Arrangement.Center
         ) {
             items(items.size) { index ->
                 if (index == currentIndex) {
                     Column(
-                        modifier = Modifier.padding(16.dp),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .then(
+                                with(LocalDensity.current) {
+                                    Modifier.size(
+                                        width = size.width.toDp(),
+                                        height = rowHeightPartial,
+                                    )
+                                }
+                            ),
                         horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        // Título del consejo
+                    ){
                         Text(
                             text = items[index],
                             fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            color = headerGreen
+                            fontSize = 16.sp,
+                            color = headerGreen,
+                            maxLines = 2
                         )
                         // Contenido del consejo
                         Text(
@@ -258,7 +282,7 @@ fun StartMenu() {
             }
             Column(
                 modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.End
+               horizontalAlignment = Alignment.End
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.eco_espacio),
@@ -355,6 +379,30 @@ fun StartMenu() {
                 fontFamily = FontFamily.Serif,
                 color = Color.Black,
                 fontSize = textSize,
+                modifier = Modifier
+                    .padding(
+                        top = 12.dp,
+                        start = 16.dp
+                    )
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 32.dp,
+                    end = 32.dp
+                )
+                .background(beige),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(
+                text = "Racha de la semana",
+                fontFamily = FontFamily.Serif,
+                fontWeight = FontWeight.Bold,
+                color = customColor,
+                fontSize = textSize,
+                textAlign = TextAlign.Start,
                 modifier = Modifier
                     .padding(
                         top = 12.dp,
