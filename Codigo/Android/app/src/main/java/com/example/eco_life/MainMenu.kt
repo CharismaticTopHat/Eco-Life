@@ -13,6 +13,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -149,8 +150,8 @@ fun TextCarousel() {
     val lightGray = Color(194,194,194)
     val beige = Color(230,230,230)
     val headerGreen = Color(17,109,29)
-    val rowHeight = 80.dp
-    val rowHeightPartial = 48.dp
+    val rowHeight = 120.dp
+    val rowHeightPartial = 88.dp
     val buttonCornerRadius = 12.dp
 
     Row(
@@ -210,14 +211,25 @@ fun TextCarousel() {
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                             color = headerGreen,
-                            maxLines = 2
+                            maxLines = 2,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .padding(
+                                    end = 16.dp
+                                )
                         )
                         // Contenido del consejo
                         Text(
                             text = contents[index],
-                            fontSize = 14.sp,
+                            fontSize =12.sp,
                             color = Color.Black,
-                            modifier = Modifier.padding(top = 8.dp)
+                            maxLines = 3,
+                            textAlign = TextAlign.Justify,
+                            modifier = Modifier
+                                .padding(
+                                    top = 8.dp,
+                                    end = 28.dp
+                                )
                         )
                     }
                 }
@@ -247,7 +259,8 @@ fun TextCarousel() {
 fun StartMenu() {
     //Valores estéticos
     val beige = Color(230,230,230)
-    val textSize = 20.sp
+    val headerGreen = Color(17,109,29)
+    val textSize = 16.sp
     val textHeight = textSize.value.dp
     val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
@@ -307,7 +320,9 @@ fun StartMenu() {
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Bold,
                 color = customColor,
-                fontSize = textSize*1.4
+                fontSize = textSize*1.4,
+                modifier = Modifier
+                    .padding(start = 16.dp)
             )
         }
         Row(
@@ -332,7 +347,7 @@ fun StartMenu() {
                 color = customColor,
                 fontSize = textSize*1.25,
                 modifier = Modifier
-                    .padding(start = 24.dp)
+                    .padding(start = 32.dp)
             )
         }
         Row(
@@ -377,6 +392,7 @@ fun StartMenu() {
             Text(
                 text = "Usar una bolsa reutilizable para realizar las compras.",
                 fontFamily = FontFamily.Serif,
+                fontWeight = FontWeight.ExtraBold,
                 color = Color.Black,
                 fontSize = textSize,
                 modifier = Modifier
@@ -401,7 +417,7 @@ fun StartMenu() {
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Bold,
                 color = customColor,
-                fontSize = textSize,
+                fontSize = textSize * 1.2,
                 textAlign = TextAlign.Start,
                 modifier = Modifier
                     .padding(
@@ -410,6 +426,61 @@ fun StartMenu() {
                     )
             )
         }
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(16.dp)
+                .padding(start = 32.dp, end = 32.dp)
+                .background(beige)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 32.dp,
+                    end = 32.dp
+                )
+                .background(beige),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Icon(
+                Icons.Default.CheckCircle,
+                contentDescription = "completedCircle",
+                modifier = Modifier
+                    .padding(start = 16.dp)
+            )
+            Icon(
+                Icons.Default.AddCircle,
+                contentDescription = "failedCircle"
+            )
+            Icon(
+                Icons.Default.CheckCircle,
+                contentDescription = "completedCircle"
+            )
+            Icon(
+                Icons.Default.Info,
+                contentDescription = "emptyCircle"
+            )
+            Icon(
+                Icons.Default.CheckCircle,
+                contentDescription = "completedCircle"
+            )
+            Icon(
+                Icons.Default.Info,
+                contentDescription = "emptyCircle"
+            )
+            Icon(
+                Icons.Default.Info,
+                contentDescription = "emptyCircle"
+            )
+        }
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(16.dp)
+                .padding(start = 32.dp, end = 32.dp)
+                .background(beige)
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -421,19 +492,93 @@ fun StartMenu() {
             horizontalArrangement = Arrangement.Start
         ) {
             Text(
-                text = "Racha de la semana",
+                text = "Análisis mensual",
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Bold,
-                color = customColor,
-                fontSize = textSize,
-                textAlign = TextAlign.Start,
+                fontSize = textSize * 1.2,
+                color = headerGreen,
                 modifier = Modifier
-                    .padding(
-                        top = 12.dp,
-                        start = 16.dp
-                    )
+                    .padding(start = 16.dp)
             )
         }
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(16.dp)
+                .padding(start = 32.dp, end = 32.dp)
+                .background(beige)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 32.dp,
+                    end = 32.dp
+                )
+                .background(beige),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Column {
+                Text(
+                    text = "Tu emisión estadística actual es: ",
+                    fontFamily = FontFamily.Serif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = textSize/1.25,
+                    color = headerGreen,
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                )
+            }
+            Column {
+                Text(
+                    text = "5.6 toneladas de carbono. ",
+                    fontFamily = FontFamily.Serif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = textSize/1.5,
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                )
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 32.dp,
+                    end = 32.dp
+                )
+                .background(beige),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Column {
+                Text(
+                    text = "Actualmente emites más con: ",
+                    fontFamily = FontFamily.Serif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = textSize/1.25,
+                    color = headerGreen,
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                )
+            }
+            Column {
+                Text(
+                    text = "Transporte y desechos. ",
+                    fontFamily = FontFamily.Serif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = textSize/1.5,
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                )
+            }
+        }
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(24.dp)
+                .padding(start = 32.dp, end = 32.dp)
+                .background(beige)
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -450,17 +595,34 @@ fun StartMenu() {
                 .background(beige),
             horizontalArrangement = Arrangement.Start
         ) {
-            Text(
-                text = "Contenido final",
-                fontFamily = FontFamily.Serif,
-                fontWeight = FontWeight.Bold,
-                color = customColor,
-                fontSize = textSize,
+            Button(
+                onClick = { /* Agregar función */ },
                 modifier = Modifier
-                    .padding(
-                        start = 16.dp
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = buttonCornerRadius,
+                            bottomStart = buttonCornerRadius,
+                            topEnd = buttonCornerRadius,
+                            bottomEnd = buttonCornerRadius
+                        )
                     )
-            )
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.Green,
+                    contentColor = headerGreen
+                )
+            ) {
+                Text(
+                    text = "Generar un reto",
+                    fontSize = textSize*2,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            }
         }
     }
 }
