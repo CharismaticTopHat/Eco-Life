@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -67,7 +68,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//Barra de navegación
+//Barra de navegación (Presentación)
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
@@ -88,6 +89,7 @@ fun Navigation() {
     }
 }
 
+//Barra de Navegación (Visual)
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
@@ -131,7 +133,7 @@ fun TextCarousel() {
     //Variables de funcionamiento
     var currentIndex by remember { mutableIntStateOf(0) }
     var size by remember { mutableStateOf(IntSize.Zero) }
-    //Valores de recomendaciones
+    //Títulos de consejos
     val items = listOf(
         "Desconectar electrodomésticos",
         "Viajar en conjunto",
@@ -139,6 +141,7 @@ fun TextCarousel() {
         "Clasificar basura",
         "Llevar basura centros de reciclaje"
     )
+    //Descripción del Consejo
     val contents = listOf(
         "En la noche desconecta tus electrodomésticos para reducir su consumo eléctrico",
         "Si tú y algún familiar o amigo van a destinos cercanos, viajen en conjunto para hacer menos viajes",
@@ -164,7 +167,7 @@ fun TextCarousel() {
                 end = 32.dp
             )
     ) {
-        IconButton(
+        IconButton( //Botón para ver un consejo anterior
             onClick = { if (currentIndex > 0) currentIndex-- },
             modifier = Modifier
                 .clip(
@@ -181,15 +184,15 @@ fun TextCarousel() {
                 contentDescription = "Previous"
             )
         }
-
-        LazyRow(
+        //Contenedor de las recomendaciones
+        LazyColumn(
             modifier = Modifier
                 .weight(1f)
                 .background(beige)
                 .onSizeChanged {
                     size = it
                 },
-            horizontalArrangement = Arrangement.Center
+            //horizontalArrangement = Arrangement.Center
         ) {
             items(items.size) { index ->
                 if (index == currentIndex) {
@@ -215,7 +218,8 @@ fun TextCarousel() {
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(
-                                    end = 16.dp
+                                    start = 4.dp,
+                                    end = 4.dp
                                 )
                         )
                         // Contenido del consejo
@@ -228,7 +232,8 @@ fun TextCarousel() {
                             modifier = Modifier
                                 .padding(
                                     top = 8.dp,
-                                    end = 28.dp
+                                    start = 4.dp,
+                                    end = 4.dp
                                 )
                         )
                     }
@@ -398,7 +403,8 @@ fun StartMenu() {
                 modifier = Modifier
                     .padding(
                         top = 12.dp,
-                        start = 16.dp
+                        start = 16.dp,
+                        end = 4.dp
                     )
             )
         }
@@ -540,6 +546,13 @@ fun StartMenu() {
                 )
             }
         }
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(16.dp)
+                .padding(start = 32.dp, end = 32.dp)
+                .background(beige)
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
