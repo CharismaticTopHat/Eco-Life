@@ -1,9 +1,5 @@
 package com.example.eco_life
 
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.ui.graphics.vector.ImageVector
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,17 +10,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -35,11 +24,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eco_life.ui.theme.EcoLifeTheme
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -48,8 +37,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
+import com.example.ecoshops.data.DataSource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -83,7 +74,10 @@ fun Navigation() {
         ) {
             composable("main_menu") { StartMenu() }
             composable("calculator_menu") { CalculatorMenu() }
-            composable("places_menu") { PlacesMenu() }
+            composable("places_menu") { EcoPlaceList(
+                placeList = DataSource().loadEcoPlaces(),
+                modifier = Modifier.padding(innerPadding)
+            ) }
             composable("videogame") { VideogameMenu() }
         }
     }
@@ -121,10 +115,10 @@ fun BottomNavigationBar(navController: NavHostController) {
 }
 
 sealed class NavigationItem(var route: String, var icon: ImageVector, var title: String) {
-    object MainMenu : NavigationItem("main_menu", Icons.Default.Home, "Menú Principal")
-    object CalculatorMenu : NavigationItem("calculator_menu", Icons.Default.Add, "Calculadora")
-    object PlacesMenu : NavigationItem("places_menu", Icons.Default.Place, "Lugares")
-    object VideogameMenu : NavigationItem("videogame", Icons.Default.Face, "Videojuego")
+    data object MainMenu : NavigationItem("main_menu", Icons.Default.Home, "Menú Principal")
+    data object CalculatorMenu : NavigationItem("calculator_menu", Icons.Default.Add, "Calculadora")
+    data object PlacesMenu : NavigationItem("places_menu", Icons.Default.Place, "Lugares")
+    data object VideogameMenu : NavigationItem("videogame", Icons.Default.Face, "Videojuego")
 }
 
 //Función para crear el "Carrusel" de Consejos
@@ -135,19 +129,19 @@ fun TextCarousel() {
     var size by remember { mutableStateOf(IntSize.Zero) }
     //Títulos de consejos
     val items = listOf(
-        "Desconectar electrodomésticos",
-        "Viajar en conjunto",
-        "Usar rastrillos de metal",
-        "Clasificar basura",
-        "Llevar basura centros de reciclaje"
+        stringResource(R.string.titleTip1),
+        stringResource(R.string.titleTip2),
+        stringResource(R.string.titleTip3),
+        stringResource(R.string.titleTip4),
+        stringResource(R.string.titleTip5)
     )
     //Descripción del Consejo
     val contents = listOf(
-        "En la noche desconecta tus electrodomésticos para reducir su consumo eléctrico",
-        "Si tú y algún familiar o amigo van a destinos cercanos, viajen en conjunto para hacer menos viajes",
-        "Resultan más duraderos que rastrillos de plástico y generan menos residuos",
-        "Al separarse dependiendo de si son papel, plástico, metal o vidrio, facilitas su reciclaje.",
-        "Ayudandoles a cumplir con su labor de reciclar basura, reduciendo el tiempo usado en recolectarla."
+        stringResource(R.string.contentTip1),
+        stringResource(R.string.contentTip2),
+        stringResource(R.string.contentTip3),
+        stringResource(R.string.contentTip4),
+        stringResource(R.string.contentTip5)
     )
     //Valores estéticos
     val lightGray = Color(194,194,194)
@@ -624,7 +618,8 @@ fun StartMenu() {
                     .padding(
                         start = 16.dp,
                         end = 16.dp,
-                        bottom = 16.dp),
+                        bottom = 16.dp
+                    ),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Green,
                     contentColor = headerGreen

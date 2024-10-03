@@ -1,3 +1,65 @@
 <resources>
-    <string name="app_name">Eco-Life</string>
+    <string name="app_name">EcoShops</string>
+
+    <string name="place1">La Casa Verde</string>
+    <string name="address1">P. Sherman, 42 Wallaby Way.</string>
+    <string name="days1">Lunes a Viernes</string>
+    <string name="hours1">9:00 A.M. - 7:00 P.M.</string>
+
+    <string name="place2">Tierra Viva</string>
+    <string name="address2">Av. Revolución 120, Ciudad de México.</string>
+    <string name="days2">Lunes a Sábado</string>
+    <string name="hours2">10:00 A.M. - 6:00 P.M.</string>
+
+    <string name="place3">EcoFuturo</string>
+    <string name="address3">Calle Florencia 15, Monterrey.</string>
+    <string name="days3">Lunes a Domingo</string>
+    <string name="hours3">8:00 A.M. - 8:00 P.M.</string>
+
+    <string name="place4">Verde Sustentable</string>
+    <string name="address4">Plaza Central, Local 45, Puebla.</string>
+    <string name="days4">Martes a Domingo</string>
+    <string name="hours4">11:00 A.M. - 7:30 P.M.</string>
+
+    <string name="place5">Planeta Limpio</string>
+    <string name="address5">Calle San Juan 90, Guadalajara.</string>
+    <string name="days5">Lunes a Viernes</string>
+    <string name="hours5">9:30 A.M. - 6:00 P.M.</string>
+
+    <string name="place6">Green Market</string>
+    <string name="address6">Av. Independencia 234, Mérida.</string>
+    <string name="days6">Lunes a Sábado</string>
+    <string name="hours6">9:00 A.M. - 8:00 P.M.</string>
+
+    <string name="place7">EcoVida</string>
+    <string name="address7">Blvd. Universidad 321, Querétaro.</string>
+    <string name="days7">Lunes a Viernes</string>
+    <string name="hours7">10:00 A.M. - 7:00 P.M.</string>
+
+    <string name="place8">Naturaleza Pura</string>
+    <string name="address8">Calle Lomas 48, Oaxaca.</string>
+    <string name="days8">Lunes a Domingo</string>
+    <string name="hours8">8:00 A.M. - 9:00 P.M.</string>
+
+    <string name="place9">EcoTienda</string>
+    <string name="address9">Calle del Sol 17, Cancún.</string>
+    <string name="days9">Lunes a Sábado</string>
+    <string name="hours9">9:00 A.M. - 6:00 P.M.</string>
+
+    <string name="place10">Recicla Ya</string>
+    <string name="address10">Av. Hidalgo 56, León.</string>
+    <string name="days10">Lunes a Viernes</string>
+    <string name="hours10">8:30 A.M. - 5:30 P.M.</string>
+
+    <string name="titleTip1">Desconectar electrodomésticos</string>
+    <string name="titleTip2">Viajar en conjunto</string>
+    <string name="titleTip3">Usar rastrillos de metal</string>
+    <string name="titleTip4">Clasificar basura</string>
+    <string name="titleTip5">Llevar basura centros de reciclaje</string>
+
+    <string name="contentTip1">En la noche desconecta tus electrodomésticos para reducir su consumo eléctrico</string>
+    <string name="contentTip2">Si tú y algún familiar o amigo van a destinos cercanos, viajen en conjunto para hacer menos viajes</string>
+    <string name="contentTip3">Resultan más duraderos que rastrillos de plástico y generan menos residuos</string>
+    <string name="contentTip4">Al separarse dependiendo de si son papel, plástico, metal o vidrio, facilitas su reciclaje.</string>
+    <string name="contentTip5">Ayudandoles a cumplir con su labor de reciclar basura, reduciendo el tiempo usado en recolectarla.</string>
 </resources>
