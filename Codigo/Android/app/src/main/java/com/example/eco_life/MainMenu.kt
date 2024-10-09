@@ -264,6 +264,16 @@ fun StartMenu() {
     val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
 
+    //Variables de Funcionamiento
+    var currentChallengeId by remember { mutableStateOf(R.string.challenge0) }
+    val challengeIds = listOf(
+        R.string.challenge1,
+        R.string.challenge2,
+        R.string.challenge3,
+        R.string.challenge4,
+        R.string.challenge5
+    )
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -389,17 +399,13 @@ fun StartMenu() {
             horizontalArrangement = Arrangement.Start
         ) {
             Text(
-                text = "Usar una bolsa reutilizable para realizar las compras.",
+                text = stringResource(id = currentChallengeId),
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.ExtraBold,
                 color = Color.Black,
                 fontSize = textSize,
                 modifier = Modifier
-                    .padding(
-                        top = 12.dp,
-                        start = 16.dp,
-                        end = 4.dp
-                    )
+                    .padding(top = 12.dp, start = 16.dp, end = 4.dp)
             )
         }
         Row(
@@ -603,23 +609,16 @@ fun StartMenu() {
             horizontalArrangement = Arrangement.Start
         ) {
             Button(
-                onClick = { /* Agregar función */ },
+                onClick = {
+                    currentChallengeId = challengeIds.random()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(80.dp)
                     .clip(
-                        RoundedCornerShape(
-                            topStart = buttonCornerRadius,
-                            bottomStart = buttonCornerRadius,
-                            topEnd = buttonCornerRadius,
-                            bottomEnd = buttonCornerRadius
-                        )
+                        RoundedCornerShape(buttonCornerRadius)
                     )
-                    .padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        bottom = 16.dp
-                    ),
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Green,
                     contentColor = headerGreen

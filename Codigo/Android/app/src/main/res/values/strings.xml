@@ -62,4 +62,11 @@
     <string name="contentTip3">Resultan más duraderos que rastrillos de plástico y generan menos residuos</string>
     <string name="contentTip4">Al separarse dependiendo de si son papel, plástico, metal o vidrio, facilitas su reciclaje.</string>
     <string name="contentTip5">Ayudandoles a cumplir con su labor de reciclar basura, reduciendo el tiempo usado en recolectarla.</string>
+
+    <string name="challenge0">No hay ningún reto activo.</string>
+    <string name="challenge1">Usar bicicleta o ir a pie para hacer tus  compras (de estar a menos 1 kilómetro de distancia).</string>
+    <string name="challenge2">Utilizar una bolsa reutilizable para realizar las compras.</string>
+    <string name="challenge3">Pasar el día sin usar aire acondicionado.</string>
+    <string name="challenge4">No hagas cargas parciales en tu dispositivo.</string>
+    <string name="challenge5">Al cocinar, usa tapas para tus sartenes.</string>
 </resources>
