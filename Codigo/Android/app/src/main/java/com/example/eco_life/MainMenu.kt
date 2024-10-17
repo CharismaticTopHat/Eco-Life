@@ -634,7 +634,6 @@ fun StartMenu() {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {

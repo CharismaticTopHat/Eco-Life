@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcoLife"
         tools:targetApi="31">
+        <!-- Cambiar android:name=".DataActivity" para añadir -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
