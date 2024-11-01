@@ -12,9 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcoLife"
         tools:targetApi="31">
-        <!-- Cambiar android:name=".DataActivity" para añadir -->
+        <!-- Cambiar android:name=".DataActivity" para Base de Datos -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ViewEmissions"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.EcoLife">

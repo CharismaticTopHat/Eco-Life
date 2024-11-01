@@ -1,9 +1,5 @@
 package com.example.eco_life
 
-
-
-
-
 import DBHandler
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -73,7 +69,7 @@ class DataActivity : ComponentActivity() {
                                 })
                         }) {
                         // on below line we are calling our method to display UI
-                        addDataToDatabase(LocalContext.current)
+                        AddDataToDatabase(LocalContext.current)
                     }
                 }
             }
@@ -83,7 +79,7 @@ class DataActivity : ComponentActivity() {
 
 // on below line we are creating battery status function.
 @Composable
-fun addDataToDatabase(
+fun AddDataToDatabase(
     context: Context
 ) {
     val activity = context as Activity
