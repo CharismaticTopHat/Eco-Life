@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -32,10 +34,11 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -47,6 +50,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.eco_life.VideogameMenu
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.*
+import androidx.compose.material.*
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.ui.res.stringResource
+import com.google.android.gms.maps.model.Circle
+import java.time.LocalDate
+import java.time.DayOfWeek
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -273,6 +286,15 @@ fun StartMenu() {
         R.string.challenge4,
         R.string.challenge5
     )
+    val challengeState = listOf(
+        R.string.challenge999,
+        R.string.challenge1000
+    )
+    val coroutineScope = rememberCoroutineScope()
+    val dayStatus = remember { mutableStateListOf<Boolean?>(null, null, null, null, null, null, null) } // Fixed: added missing closing parenthesis
+    val currentDate = LocalDate.now()
+    val currentDayOfWeek = currentDate.dayOfWeek.value
+    var showWarning by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -391,10 +413,7 @@ fun StartMenu() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    start = 32.dp,
-                    end = 32.dp
-                )
+                .padding(start = 32.dp, end = 32.dp)
                 .background(beige),
             horizontalArrangement = Arrangement.Start
         ) {
@@ -407,6 +426,62 @@ fun StartMenu() {
                 modifier = Modifier
                     .padding(top = 12.dp, start = 16.dp, end = 4.dp)
             )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 32.dp, end = 32.dp)
+                .background(beige),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            if (currentChallengeId != R.string.challenge0) {
+                Button(
+                    onClick = {
+                        currentChallengeId = R.string.challenge999
+                        coroutineScope.launch {
+                            delay(5000)
+                            currentChallengeId = R.string.challenge0
+                        }
+                    },
+                    modifier = Modifier
+                        .defaultMinSize(minWidth = 120.dp)
+                        .height(70.dp)
+                        .padding(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Green,
+                        contentColor = headerGreen
+                    )
+                ) {
+                    Text(
+                        text = "Completar reto",
+                        fontSize = textSize,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+                Button(
+                    onClick = {
+                        currentChallengeId = R.string.challenge1000
+                        coroutineScope.launch {
+                            delay(5000)
+                            currentChallengeId = R.string.challenge0
+                        }
+                    },
+                    modifier = Modifier
+                        .defaultMinSize(minWidth = 120.dp)
+                        .height(70.dp)
+                        .padding(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Red,
+                        contentColor = Color.Black
+                    )
+                ) {
+                    Text(
+                        text = "Omitir reto",
+                        fontSize = textSize,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+            }
         }
         Row(
             modifier = Modifier
@@ -442,43 +517,23 @@ fun StartMenu() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    start = 32.dp,
-                    end = 32.dp
-                )
+                .padding(start = 32.dp, end = 32.dp)
                 .background(beige),
             horizontalArrangement = Arrangement.Start
         ) {
-            Icon(
-                Icons.Default.CheckCircle,
-                contentDescription = "completedCircle",
-                modifier = Modifier
-                    .padding(start = 16.dp)
-            )
-            Icon(
-                Icons.Default.AddCircle,
-                contentDescription = "failedCircle"
-            )
-            Icon(
-                Icons.Default.CheckCircle,
-                contentDescription = "completedCircle"
-            )
-            Icon(
-                Icons.Default.Info,
-                contentDescription = "emptyCircle"
-            )
-            Icon(
-                Icons.Default.CheckCircle,
-                contentDescription = "completedCircle"
-            )
-            Icon(
-                Icons.Default.Info,
-                contentDescription = "emptyCircle"
-            )
-            Icon(
-                Icons.Default.Info,
-                contentDescription = "emptyCircle"
-            )
+            for (i in 1..7) {
+                val icon = when {
+                    i < currentDayOfWeek -> Icons.Default.Info
+                    dayStatus[i - 1] == true -> Icons.Default.CheckCircle
+                    dayStatus[i - 1] == false -> Icons.Default.Close
+                    else -> Icons.Default.Info
+                }
+                Icon(
+                    icon,
+                    contentDescription = "Icon for day $i",
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
         }
         Spacer(
             modifier = Modifier
@@ -610,7 +665,15 @@ fun StartMenu() {
         ) {
             Button(
                 onClick = {
-                    currentChallengeId = challengeIds.random()
+                    if (currentChallengeId == R.string.challenge0) {
+                        currentChallengeId = challengeIds.random()
+                    } else {
+                        showWarning = true
+                        coroutineScope.launch {
+                            delay(5000)
+                            showWarning = false
+                        }
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -626,10 +689,20 @@ fun StartMenu() {
             ) {
                 Text(
                     text = "Generar un reto",
-                    fontSize = textSize*2,
+                    fontSize = textSize * 2,
                     fontWeight = FontWeight.ExtraBold
                 )
             }
+            if (showWarning) {
+                Text(
+                    text = "Termina tu reto actual antes de generar uno nuevo",
+                    color = Color.Red,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = textSize,
+                    modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)
+                )
+            }
+
         }
     }
 }

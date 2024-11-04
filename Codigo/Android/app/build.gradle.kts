@@ -63,6 +63,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.0.0")
     implementation("androidx.compose.ui:ui-tooling:1.4.0")
     implementation(libs.androidx.media3.datasource)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

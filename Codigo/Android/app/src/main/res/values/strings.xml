@@ -69,4 +69,6 @@
     <string name="challenge3">Pasar el día sin usar aire acondicionado.</string>
     <string name="challenge4">No hagas cargas parciales en tu dispositivo.</string>
     <string name="challenge5">Al cocinar, usa tapas para tus sartenes.</string>
+    <string name="challenge999">¡Bien hecho!</string>
+    <string name="challenge1000">El reto no ha sido completado.</string>
 </resources>
