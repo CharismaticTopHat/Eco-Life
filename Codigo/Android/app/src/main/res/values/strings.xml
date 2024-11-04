@@ -71,4 +71,5 @@
     <string name="challenge5">Al cocinar, usa tapas para tus sartenes.</string>
     <string name="challenge999">¡Bien hecho!</string>
     <string name="challenge1000">El reto no ha sido completado.</string>
+    <string name="challenge1001">Termina tu reto actual antes de generar uno nuevo.</string>
 </resources>

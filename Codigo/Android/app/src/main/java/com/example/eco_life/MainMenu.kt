@@ -288,7 +288,8 @@ fun StartMenu() {
     )
     val challengeState = listOf(
         R.string.challenge999,
-        R.string.challenge1000
+        R.string.challenge1000,
+        R.string.challenge1001
     )
     val coroutineScope = rememberCoroutineScope()
     var dayStatus by remember { mutableStateOf(Array(7) { "waiting" }) }
@@ -674,10 +675,11 @@ fun StartMenu() {
                     if (currentChallengeId == R.string.challenge0) {
                         currentChallengeId = challengeIds.random()
                     } else {
-                        showWarning = true
                         coroutineScope.launch {
+                            val previousChallengeId = currentChallengeId
+                            currentChallengeId = R.string.challenge1001
                             delay(5000)
-                            showWarning = false
+                            currentChallengeId = previousChallengeId
                         }
                     }
                 },
@@ -699,16 +701,6 @@ fun StartMenu() {
                     fontWeight = FontWeight.ExtraBold
                 )
             }
-            if (showWarning) {
-                Text(
-                    text = "Termina tu reto actual antes de generar uno nuevo",
-                    color = Color.Red,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = textSize,
-                    modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)
-                )
-            }
-
         }
     }
 }
