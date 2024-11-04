@@ -291,7 +291,7 @@ fun StartMenu() {
         R.string.challenge1000
     )
     val coroutineScope = rememberCoroutineScope()
-    val dayStatus = remember { mutableStateListOf<Boolean?>(null, null, null, null, null, null, null) } // Fixed: added missing closing parenthesis
+    var dayStatus by remember { mutableStateOf(Array(7) { "waiting" }) }
     val currentDate = LocalDate.now()
     val currentDayOfWeek = currentDate.dayOfWeek.value
     var showWarning by remember { mutableStateOf(false) }
@@ -427,6 +427,11 @@ fun StartMenu() {
                     .padding(top = 12.dp, start = 16.dp, end = 4.dp)
             )
         }
+        LaunchedEffect(currentDayOfWeek) {
+            dayStatus = dayStatus.mapIndexed { index, status ->
+                if (index < currentDayOfWeek - 1 && status == "waiting") "failed" else status
+            }.toTypedArray()
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -438,6 +443,7 @@ fun StartMenu() {
                 Button(
                     onClick = {
                         currentChallengeId = R.string.challenge999
+                        dayStatus[currentDayOfWeek - 1] = "completed"
                         coroutineScope.launch {
                             delay(5000)
                             currentChallengeId = R.string.challenge0
@@ -524,8 +530,8 @@ fun StartMenu() {
             for (i in 1..7) {
                 val icon = when {
                     i < currentDayOfWeek -> Icons.Default.Info
-                    dayStatus[i - 1] == true -> Icons.Default.CheckCircle
-                    dayStatus[i - 1] == false -> Icons.Default.Close
+                    dayStatus[i - 1] == "completed" -> Icons.Default.CheckCircle
+                    dayStatus[i - 1] == "failed" -> Icons.Default.Close
                     else -> Icons.Default.Info
                 }
                 Icon(
