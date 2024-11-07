@@ -1,7 +1,10 @@
 package com.example.eco_life
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -17,11 +20,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.eco_life.data.DBHandler
-import android.annotation.SuppressLint
 import com.example.eco_life.ui.theme.EcoLifeTheme
 import com.example.eco_life.ui.theme.greenColor
 
-class ViewEmissions : ComponentActivity() {
+class DataDeleteActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,14 +39,14 @@ class ViewEmissions : ComponentActivity() {
                                 backgroundColor = greenColor,
                                 title = {
                                     Text(
-                                        text = "Emissions",
+                                        text = "Delete Emission Data",
                                         modifier = Modifier.fillMaxWidth(),
                                         textAlign = TextAlign.Center,
                                         color = Color.White
                                     )
                                 })
                         }) {
-                        EmissionDataList(LocalContext.current)
+                        DeleteEmissionDataList(LocalContext.current)
                     }
                 }
             }
@@ -53,40 +55,49 @@ class ViewEmissions : ComponentActivity() {
 }
 
 @Composable
-fun EmissionDataList(context: Context) {
+fun DeleteEmissionDataList(context: Context) {
     val dbHandler = DBHandler(context)
     val emissionList = dbHandler.readEmissions()
 
     LazyColumn {
         itemsIndexed(emissionList) { _, item ->
             Card(
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
                 elevation = 6.dp
             ) {
                 Column(
-                    modifier = Modifier.padding(8.dp).fillMaxWidth(),
+                    modifier = Modifier.padding(8.dp),
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
                         text = "Emission Factor: ${item.emissionFactor}",
-                        modifier = Modifier.padding(4.dp),
-                        color = Color.Black, textAlign = TextAlign.Center
+                        color = Color.Black,
+                        textAlign = TextAlign.Center
                     )
-                    Spacer(modifier = Modifier.width(5.dp))
-
                     Text(
                         text = "Emission Value: ${item.emissionValue}",
-                        modifier = Modifier.padding(4.dp),
-                        color = Color.Black, textAlign = TextAlign.Center
+                        color = Color.Black,
+                        textAlign = TextAlign.Center
                     )
-                    Spacer(modifier = Modifier.width(5.dp))
-
                     Text(
                         text = "Emission Date: ${item.emissionDate}",
-                        modifier = Modifier.padding(4.dp),
-                        color = Color.Black, textAlign = TextAlign.Center
+                        color = Color.Black,
+                        textAlign = TextAlign.Center
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = {
+                            dbHandler.deleteEmission(item.id)
+                            Toast.makeText(context, "Emission deleted", Toast.LENGTH_SHORT).show()
+                            (context as Activity).recreate() // Refresh the list after deletion
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = "Delete", color = Color.White)
+                    }
                 }
             }
         }

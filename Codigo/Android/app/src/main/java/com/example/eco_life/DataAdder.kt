@@ -1,6 +1,8 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.example.eco_life
 
-import DBHandler
+import com.example.eco_life.data.DBHandler
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -11,6 +13,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +32,7 @@ import com.example.eco_life.ui.theme.EcoLifeTheme
 import com.example.eco_life.ui.theme.greenColor
 
 class DataActivity : ComponentActivity() {
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "ObsoleteSdkInt")
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +85,7 @@ class DataActivity : ComponentActivity() {
 fun AddDataToDatabase(
     context: Context
 ) {
-    val activity = context as Activity
+    context as Activity
     // on below line creating a variable for battery status
     val emissionFactor = remember {
         mutableStateOf(TextFieldValue())
@@ -105,7 +108,7 @@ fun AddDataToDatabase(
         verticalArrangement = Arrangement.Center,
     ) {
 
-        var dbHandler: DBHandler = DBHandler(context)
+        val dbHandler = DBHandler(context)
 
         // on below line we are adding a text for heading.
         Text(

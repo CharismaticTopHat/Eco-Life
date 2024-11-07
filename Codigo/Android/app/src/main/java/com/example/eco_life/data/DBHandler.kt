@@ -1,3 +1,5 @@
+package com.example.eco_life.data
+
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -28,6 +30,13 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         values.put(VALUE_COL, emissionValue)
         values.put(DATE_COL, emissionDate)
         db.insert(TABLE_NAME, null, values)
+        db.close()
+    }
+
+    // Function to delete a specific emission record
+    fun deleteEmission(id: Int) {
+        val db = this.writableDatabase
+        db.delete(TABLE_NAME, "$ID_COL=?", arrayOf(id.toString()))
         db.close()
     }
 
