@@ -28,6 +28,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
@@ -39,6 +40,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.ecoshops.data.DataSource
 
 class CalculatorActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
@@ -46,14 +52,35 @@ class CalculatorActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EcoLifeTheme {
-                CalculatorMenu()
+                NavigationCalculator()
             }
         }
     }
 }
 
 @Composable
-fun CalculatorMenu() {
+fun NavigationCalculator() {
+    val navController = rememberNavController()
+
+    Scaffold(
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = "calculator_menu",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable("calculator_menu") { CalculatorMenu(navController = navController) }
+            composable("emissions_trash") { EmissionsTrashMenu() }
+            composable("emissions_transport") { EmissionsTransportMenu() }
+            composable("emissions_food") { EmissionsFoodMenu() }
+            composable("emissions_energy") { EmissionsEnergyMenu() }
+        }
+    }
+}
+
+
+@Composable
+fun CalculatorMenu(navController: NavController) {
     //Valores estéticos
     val beige = Color(230,230,230)
     val textSize = 20.sp
@@ -163,7 +190,9 @@ fun CalculatorMenu() {
                     horizontalAlignment = Alignment.End
                 ) {
                     Button(
-                        onClick = { /* Agregar función */ },
+                        onClick = {
+                            navController.navigate("emissions_transport")
+                        },
                         modifier = Modifier
                             .width(108.dp)
                             .height(44.dp)
@@ -287,7 +316,9 @@ fun CalculatorMenu() {
                     horizontalAlignment = Alignment.End
                 ) {
                     Button(
-                        onClick = { /* Agregar función */ },
+                        onClick = {
+                            navController.navigate("emissions_energy")
+                        },
                         modifier = Modifier
                             .width(108.dp)
                             .height(44.dp)
@@ -409,7 +440,9 @@ fun CalculatorMenu() {
                     horizontalAlignment = Alignment.End
                 ) {
                     Button(
-                        onClick = { /* Agregar función */ },
+                        onClick = {
+                            navController.navigate("emissions_food")
+                        },
                         modifier = Modifier
                             .width(108.dp)
                             .height(44.dp)
@@ -531,7 +564,9 @@ fun CalculatorMenu() {
                     horizontalAlignment = Alignment.End
                 ) {
                     Button(
-                        onClick = { /* Agregar función */ },
+                        onClick = {
+                            navController.navigate("emissions_trash")
+                        },
                         modifier = Modifier
                             .width(108.dp)
                             .height(44.dp)
@@ -619,6 +654,6 @@ fun CalculatorMenu() {
 @Composable
 fun CalculatorPreview() {
     EcoLifeTheme {
-        CalculatorMenu()
+        NavigationCalculator()
     }
 }

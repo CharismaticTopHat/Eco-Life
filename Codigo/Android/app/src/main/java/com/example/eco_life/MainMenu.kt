@@ -76,9 +76,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController = navController) }
+        bottomBar = {
+            BottomNavigationBar(navController = navController)
+        }
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -86,7 +90,7 @@ fun Navigation() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("main_menu") { StartMenu() }
-            composable("calculator_menu") { CalculatorMenu() }
+            composable("calculator_menu") { NavigationCalculator() }
             composable("places_menu") { EcoPlaceList(
                 placeList = DataSource().loadEcoPlaces(),
                 modifier = Modifier.padding(innerPadding)
@@ -295,7 +299,6 @@ fun StartMenu() {
     var dayStatus by remember { mutableStateOf(Array(7) { "waiting" }) }
     val currentDate = LocalDate.now()
     val currentDayOfWeek = currentDate.dayOfWeek.value
-    var showWarning by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -428,11 +431,6 @@ fun StartMenu() {
                     .padding(top = 12.dp, start = 16.dp, end = 4.dp)
             )
         }
-        LaunchedEffect(currentDayOfWeek) {
-            dayStatus = dayStatus.mapIndexed { index, status ->
-                if (index < currentDayOfWeek - 1 && status == "waiting") "failed" else status
-            }.toTypedArray()
-        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -521,6 +519,11 @@ fun StartMenu() {
                 .padding(start = 32.dp, end = 32.dp)
                 .background(beige)
         )
+        LaunchedEffect(currentDayOfWeek) {
+            dayStatus = dayStatus.mapIndexed { index, status ->
+                if (index < currentDayOfWeek - 1 && status == "waiting") "failed" else status
+            }.toTypedArray()
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -529,16 +532,17 @@ fun StartMenu() {
             horizontalArrangement = Arrangement.Start
         ) {
             for (i in 1..7) {
-                val icon = when {
-                    i < currentDayOfWeek -> Icons.Default.Info
-                    dayStatus[i - 1] == "completed" -> Icons.Default.CheckCircle
-                    dayStatus[i - 1] == "failed" -> Icons.Default.Close
-                    else -> Icons.Default.Info
+                val iconRes = when {
+                    dayStatus[i - 1] == "completed" -> R.drawable.greenleaf
+                    dayStatus[i - 1] == "failed" -> R.drawable.redleaf
+                    else -> R.drawable.grayleaf
                 }
-                Icon(
-                    icon,
-                    contentDescription = "Icon for day $i",
-                    modifier = Modifier.padding(start = 16.dp)
+                Image(
+                    painter = painterResource(id = iconRes),
+                    contentDescription = "Icono para día $i",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .padding(start = 16.dp)
                 )
             }
         }
