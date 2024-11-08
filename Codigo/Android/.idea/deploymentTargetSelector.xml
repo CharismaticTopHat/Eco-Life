@@ -2,7 +2,7 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="app">
+      <SelectionState runConfigName="EcoLife">
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2024-11-06T17:40:37.705731700Z">
           <Target type="DEFAULT_BOOT">
