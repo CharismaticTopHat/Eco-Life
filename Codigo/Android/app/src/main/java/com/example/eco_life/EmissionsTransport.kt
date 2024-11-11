@@ -1,22 +1,20 @@
 package com.example.eco_life
 
-import androidx.compose.ui.graphics.vector.ImageVector
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -27,35 +25,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eco_life.ui.theme.EcoLifeTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.*
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.runtime.LaunchedEffect
-import kotlinx.coroutines.delay
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntSize
-import com.example.ecoshops.data.DataSource
-import com.example.eco_life.VideogameMenu
-import kotlinx.coroutines.launch
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.background
-import androidx.compose.ui.res.stringResource
-import com.google.android.gms.maps.model.Circle
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.platform.LocalContext
+import com.example.eco_life.data.DBHandler
 import java.time.LocalDate
-import java.time.DayOfWeek
 
 class EmissionsTransportActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -66,6 +50,7 @@ class EmissionsTransportActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EmissionsTransportMenu(){
     //Valores estéticos
@@ -75,6 +60,8 @@ fun EmissionsTransportMenu(){
     val textHeight = textSize.value.dp
     val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
+    var selectedValue by remember { mutableStateOf(0) }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -94,7 +81,7 @@ fun EmissionsTransportMenu(){
                     text = "Residuos Desechados",
                     fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.Bold,
-                    fontSize = textSize*2,
+                    fontSize = textSize * 2,
                     color = Color.Green,
                     modifier = Modifier
                         .padding(
@@ -104,6 +91,7 @@ fun EmissionsTransportMenu(){
                 )
             }
         }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -113,58 +101,137 @@ fun EmissionsTransportMenu(){
                     end = 20.dp
                 ),
             verticalAlignment = Alignment.CenterVertically
-        ){
-            Column(
-                modifier = Modifier
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.car),
-                    contentDescription = "Drawable",
+        ) {
+            val images = listOf(
+                Pair(R.drawable.car, 1),
+                Pair(R.drawable.boat, 2),
+                Pair(R.drawable.plane, 3),
+                Pair(R.drawable.more, 4)
+            )
+
+            images.forEach { (imageRes, value) ->
+                Column(
                     modifier = Modifier
-                        .size(30.dp)
-                )
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(60.dp)
+                            .background(Color.Gray, shape = CircleShape)
+                            .clickable {
+                                selectedValue = value
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = imageRes),
+                            contentDescription = "Drawable",
+                            modifier = Modifier
+                                .size(30.dp)
+                        )
+                    }
+                }
             }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = 24.dp,
+                    start = 16.dp,
+                    end = 20.dp
+                ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Column(
                 modifier = Modifier
                     .weight(1f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.boat),
-                    contentDescription = "Drawable",
+                Row(
                     modifier = Modifier
-                        .size(30.dp)
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.plane),
-                    contentDescription = "Drawable",
-                    modifier = Modifier
-                        .size(30.dp)
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.more),
-                    contentDescription = "Drawable",
-                    modifier = Modifier
-                        .size(30.dp)
-                )
+                        .fillMaxWidth()
+                        .padding(
+                            top = 24.dp,
+                            start = 16.dp,
+                            end = 20.dp
+                        ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Button(
+                            onClick = {
+                            },
+                            modifier = Modifier
+                                .height(80.dp)
+                                .clip(RoundedCornerShape(buttonCornerRadius))
+                                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color.Gray,
+                                contentColor = headerGreen
+                            )
+                        ) {
+                            Text(
+                                text = "Cancelar",
+                                fontSize = textSize,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = Color.Black
+                            )
+                        }
+                    }
+
+                    // Continue Button
+                    Column {
+                        Button(
+                            onClick = {
+                                if (selectedValue != 0) {
+                                    saveToDatabase(context, selectedValue)
+                                }
+                            },
+                            modifier = Modifier
+                                .height(80.dp)
+                                .clip(RoundedCornerShape(buttonCornerRadius))
+                                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color.Gray,
+                                contentColor = headerGreen
+                            )
+                        ) {
+                            Text(
+                                text = "Continuar",
+                                fontSize = textSize,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = Color.Black
+                            )
+                        }
+                    }
+                }
             }
         }
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun saveToDatabase(context: Context, selectedValue: Int) {
+    val dbHandler = DBHandler(context)
+
+    val additionalValue = when (selectedValue) {
+        1 -> 0.25 // car
+        2 -> 0.5  // boat
+        3 -> 0.75 // plane
+        4 -> 1.0  // more
+        else -> 0.0
+    }
+
+    val currentDate = LocalDate.now().toString()
+
+    dbHandler.addNewCourse(selectedValue, additionalValue, currentDate)
+    Toast.makeText(context, "Saved value $selectedValue with additional $additionalValue on $currentDate", Toast.LENGTH_SHORT).show()
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun EmissionsTransportPreview() {

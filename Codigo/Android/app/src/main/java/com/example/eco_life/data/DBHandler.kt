@@ -20,9 +20,9 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
 
     // Function to add a new course
     fun addNewCourse(
-        emissionFactor: Int?,
-        emissionValue: Int?,
-        emissionDate: String?
+        emissionFactor: Int,
+        emissionValue: Double,
+        emissionDate: String
     ) {
         val db = this.writableDatabase
         val values = ContentValues()

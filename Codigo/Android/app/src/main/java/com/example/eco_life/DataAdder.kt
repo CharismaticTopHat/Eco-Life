@@ -91,7 +91,7 @@ fun AddDataToDatabase(
         val dbHandler = DBHandler(context)
 
         Text(
-            text = "SQlite Database in Android",
+            text = "SQLite Database in Android",
             color = greenColor, fontSize = 20.sp, fontWeight = FontWeight.Bold
         )
 
@@ -130,7 +130,7 @@ fun AddDataToDatabase(
 
         Button(onClick = {
             val emissionFactor = emissionFactor.value.text.toIntOrNull() ?: 0
-            val emissionValue = emissionValue.value.text.toIntOrNull() ?: 0
+            val emissionValue = emissionValue.value.text.toDoubleOrNull() ?: 0.0
             dbHandler.addNewCourse(
                 emissionFactor,
                 emissionValue,
