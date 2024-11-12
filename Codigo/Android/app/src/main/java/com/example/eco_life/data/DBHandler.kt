@@ -12,23 +12,28 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
     override fun onCreate(db: SQLiteDatabase) {
         val query = ("CREATE TABLE $TABLE_NAME ("
                 + "$ID_COL INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "$FACTOR_COL TEXT, "
-                + "$VALUE_COL TEXT, "
-                + "$DATE_COL TEXT)")
+                + "$FACTOR_COL REAL, "
+                + "$VALUE_COL REAL, "
+                + "$DATE_COL TEXT, "
+                + "$TYPE_COL TEXT, "
+                + "$HOURS_COL REAL)")
         db.execSQL(query)
     }
 
-    // Function to add a new course
     fun addNewCourse(
-        emissionFactor: Int,
+        emissionFactor: Double,
         emissionValue: Double,
-        emissionDate: String
+        emissionDate: String,
+        type: String,
+        hours: Double
     ) {
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(FACTOR_COL, emissionFactor)
         values.put(VALUE_COL, emissionValue)
         values.put(DATE_COL, emissionDate)
+        values.put(TYPE_COL, type)
+        values.put(HOURS_COL, hours)
         db.insert(TABLE_NAME, null, values)
         db.close()
     }
@@ -40,7 +45,7 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         db.close()
     }
 
-    // Read function to retrieve all courses
+    // Read function to retrieve all emissions
     fun readEmissions(): List<EmissionModel> {
         val emissionsList = mutableListOf<EmissionModel>()
         val db = this.readableDatabase
@@ -48,13 +53,15 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
 
         if (cursor.moveToFirst()) {
             do {
-                val course = EmissionModel(
+                val emission = EmissionModel(
                     id = cursor.getInt(cursor.getColumnIndexOrThrow(ID_COL)),
-                    emissionFactor = cursor.getInt(cursor.getColumnIndexOrThrow(FACTOR_COL)),
-                    emissionValue = cursor.getInt(cursor.getColumnIndexOrThrow(VALUE_COL)),
-                    emissionDate = cursor.getString(cursor.getColumnIndexOrThrow(DATE_COL))
+                    emissionFactor = cursor.getDouble(cursor.getColumnIndexOrThrow(FACTOR_COL)),
+                    emissionValue = cursor.getDouble(cursor.getColumnIndexOrThrow(VALUE_COL)),
+                    emissionDate = cursor.getString(cursor.getColumnIndexOrThrow(DATE_COL)),
+                    type = cursor.getString(cursor.getColumnIndexOrThrow(TYPE_COL)),
+                    hours = cursor.getDouble(cursor.getColumnIndexOrThrow(HOURS_COL))
                 )
-                emissionsList.add(course)
+                emissionsList.add(emission)
             } while (cursor.moveToNext())
         }
         cursor.close()
@@ -75,5 +82,7 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         private const val FACTOR_COL = "trashFactor"
         private const val VALUE_COL = "trashValue"
         private const val DATE_COL = "date"
+        private const val TYPE_COL = "type"
+        private const val HOURS_COL = "hours"
     }
 }

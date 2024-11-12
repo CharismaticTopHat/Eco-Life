@@ -52,6 +52,221 @@ class EmissionsTransportActivity : ComponentActivity() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
+fun CarEmissions(onValueSelected: (Double) -> Unit) {
+    val context = LocalContext.current
+    val beige = Color(230,230,230)
+    val headerGreen = Color(17,109,29)
+    val textSize = 16.sp
+    val customColor = Color(30, 132, 73 )
+    val buttonCornerRadius = 12.dp
+    var selectedValue by remember { mutableStateOf(0.0) }
+    val type = "Transport"
+    var hours by remember { mutableStateOf(0.0) }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Column {
+            Button(
+                onClick = {
+                    selectedValue = 2.3
+                    onValueSelected(selectedValue)
+                },
+                modifier = Modifier
+                    .height(80.dp)
+                    .clip(RoundedCornerShape(buttonCornerRadius))
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = customColor,
+                    contentColor = headerGreen
+                )
+            ) {
+                Text(
+                    text = "Gasolina",
+                    fontSize = textSize,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.White
+                )
+            }
+        }
+        Column {
+            Button(
+                onClick = {
+                    selectedValue = 2.7
+                    onValueSelected(selectedValue)
+                },
+                modifier = Modifier
+                    .height(80.dp)
+                    .clip(RoundedCornerShape(buttonCornerRadius))
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = customColor,
+                    contentColor = headerGreen
+                )
+            ) {
+                Text(
+                    text = "Diesel",
+                    fontSize = textSize,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.White
+                )
+            }
+        }
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 100.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Column {
+            Button(
+                onClick = {
+                    selectedValue = 0.8
+                    onValueSelected(selectedValue)
+                },
+                modifier = Modifier
+                    .height(80.dp)
+                    .clip(RoundedCornerShape(buttonCornerRadius))
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = customColor,
+                    contentColor = headerGreen
+                )
+            ) {
+                Text(
+                    text = "Híbrido",
+                    fontSize = textSize,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.White
+                )
+            }
+        }
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 200.dp,
+                        start = 16.dp,
+                        end = 20.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Button(
+                        onClick = {
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Gray,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Cancelar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.Black
+                        )
+                    }
+                }
+
+                Column {
+                    Button(
+                        onClick = {
+                            if (selectedValue != 0.0) {
+                                saveToDatabase(context, selectedValue, type, hours)
+                            }
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Green,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Continuar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun MotorcycleEmissions(onValueSelected: (Double) -> Unit) {
+
+}
+
+@Composable
+fun BicycleEmissions(onValueSelected: (Double) -> Unit) {
+
+}
+
+@Composable
+fun ScooterEmissions(onValueSelected: (Double) -> Unit) {
+
+}
+
+@Composable
+fun TruckEmissions(){
+
+}
+
+@Composable
+fun TrainEmissions(){
+
+}
+
+@Composable
+fun BusEmissions(){
+
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
 fun EmissionsTransportMenu(){
     //Valores estéticos
     val beige = Color(230,230,230)
@@ -61,6 +276,7 @@ fun EmissionsTransportMenu(){
     val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var selectedValue by remember { mutableStateOf(0) }
+    var selectedScreen by remember { mutableStateOf<@Composable () -> Unit>({}) }
     val context = LocalContext.current
 
     Column(
@@ -78,7 +294,7 @@ fun EmissionsTransportMenu(){
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "Residuos Desechados",
+                    text = "Tipo de Transporte",
                     fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.Bold,
                     fontSize = textSize * 2,
@@ -104,11 +320,55 @@ fun EmissionsTransportMenu(){
         ) {
             val images = listOf(
                 Pair(R.drawable.car, 1),
-                Pair(R.drawable.boat, 2),
-                Pair(R.drawable.plane, 3),
-                Pair(R.drawable.more, 4)
+                Pair(R.drawable.motorcycle, 2),
+                Pair(R.drawable.bycicle, 3),
+                Pair(R.drawable.scooter, 4),
             )
 
+            images.forEach { (imageRes, value) ->
+                Column(
+                    modifier = Modifier
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(60.dp)
+                            .background(Color.Gray, shape = CircleShape)
+                            .clickable {
+                                selectedScreen =
+                                    getComposableScreen(value) { selectedEmissionValue ->
+                                        selectedValue = selectedEmissionValue.toInt()
+                                    }
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = imageRes),
+                            contentDescription = "Transport $value",
+                            modifier = Modifier
+                                .size(30.dp)
+                        )
+                    }
+                }
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = 24.dp,
+                    start = 16.dp,
+                    end = 20.dp
+                ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val images = listOf(
+                Pair(R.drawable.truck, 5),
+                Pair(R.drawable.train, 6),
+                Pair(R.drawable.bus, 7)
+            )
+            Spacer(modifier = Modifier.weight(0.5f))
             images.forEach { (imageRes, value) ->
                 Column(
                     modifier = Modifier
@@ -133,102 +393,41 @@ fun EmissionsTransportMenu(){
                     }
                 }
             }
+            Spacer(modifier = Modifier.weight(0.5f))
         }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    top = 24.dp,
-                    start = 16.dp,
-                    end = 20.dp
-                ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 24.dp,
-                            start = 16.dp,
-                            end = 20.dp
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
-                        Button(
-                            onClick = {
-                            },
-                            modifier = Modifier
-                                .height(80.dp)
-                                .clip(RoundedCornerShape(buttonCornerRadius))
-                                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color.Gray,
-                                contentColor = headerGreen
-                            )
-                        ) {
-                            Text(
-                                text = "Cancelar",
-                                fontSize = textSize,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = Color.Black
-                            )
-                        }
-                    }
-
-                    // Continue Button
-                    Column {
-                        Button(
-                            onClick = {
-                                if (selectedValue != 0) {
-                                    saveToDatabase(context, selectedValue)
-                                }
-                            },
-                            modifier = Modifier
-                                .height(80.dp)
-                                .clip(RoundedCornerShape(buttonCornerRadius))
-                                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color.Gray,
-                                contentColor = headerGreen
-                            )
-                        ) {
-                            Text(
-                                text = "Continuar",
-                                fontSize = textSize,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = Color.Black
-                            )
-                        }
-                    }
-                }
-            }
+        Box(modifier = Modifier.fillMaxWidth()) {
+            selectedScreen()
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun saveToDatabase(context: Context, selectedValue: Int) {
+fun saveToDatabase(context: Context, selectedValue: Double, type: String, hours: Double) {
     val dbHandler = DBHandler(context)
 
-    val additionalValue = when (selectedValue) {
-        1 -> 0.25 // car
-        2 -> 0.5  // boat
-        3 -> 0.75 // plane
-        4 -> 1.0  // more
+    val emissionValue = when (selectedValue) {
+        1.0 -> 0.25 // car
+        2.0 -> 0.5  // boat
+        3.0 -> 0.75 // plane
+        4.0 -> 1.0  // more
         else -> 0.0
     }
 
     val currentDate = LocalDate.now().toString()
 
-    dbHandler.addNewCourse(selectedValue, additionalValue, currentDate)
-    Toast.makeText(context, "Saved value $selectedValue with additional $additionalValue on $currentDate", Toast.LENGTH_SHORT).show()
+    dbHandler.addNewCourse(selectedValue, emissionValue, currentDate, type, hours)
+    Toast.makeText(context, "Saved value $selectedValue with additional $emissionValue on $currentDate", Toast.LENGTH_SHORT).show()
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getComposableScreen(selectedValue: Int, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
+    return when (selectedValue) {
+        1 -> { { CarEmissions(onValueSelected) } }
+        2 -> { { MotorcycleEmissions(onValueSelected) } }
+        3 -> { { BicycleEmissions(onValueSelected) } }
+        4 -> { { ScooterEmissions(onValueSelected) } }
+        else -> { {} }
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

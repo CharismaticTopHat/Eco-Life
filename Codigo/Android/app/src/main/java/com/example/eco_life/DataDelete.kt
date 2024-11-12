@@ -87,6 +87,16 @@ fun DeleteEmissionDataList(context: Context) {
                         color = Color.Black,
                         textAlign = TextAlign.Center
                     )
+                    Text(
+                        text = "Emission Date: ${item.type}",
+                        color = Color.Black,
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = "Emission Date: ${item.hours}",
+                        color = Color.Black,
+                        textAlign = TextAlign.Center
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
                         onClick = {

@@ -79,6 +79,12 @@ fun AddDataToDatabase(
     val date = remember {
         mutableStateOf(TextFieldValue())
     }
+    val type = remember {
+        mutableStateOf(TextFieldValue())
+    }
+    val hours = remember {
+        mutableStateOf(TextFieldValue())
+    }
 
     Column(
         modifier = Modifier
@@ -126,15 +132,39 @@ fun AddDataToDatabase(
             textStyle = TextStyle(color = Color.Black, fontSize = 15.sp),
             singleLine = true,
         )
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            value = type.value,
+            onValueChange = { date.value = it },
+            placeholder = { Text(text = "Ingrese el tipo de la emisión") },
+            modifier = Modifier
+                .fillMaxWidth(),
+            textStyle = TextStyle(color = Color.Black, fontSize = 15.sp),
+            singleLine = true,
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            value = date.value,
+            onValueChange = { date.value = it },
+            placeholder = { Text(text = "Ingrese horas de la emisión") },
+            modifier = Modifier
+                .fillMaxWidth(),
+            textStyle = TextStyle(color = Color.Black, fontSize = 15.sp),
+            singleLine = true,
+        )
         Spacer(modifier = Modifier.height(15.dp))
 
         Button(onClick = {
-            val emissionFactor = emissionFactor.value.text.toIntOrNull() ?: 0
+            val emissionFactor = emissionFactor.value.text.toDoubleOrNull() ?: 0.0
             val emissionValue = emissionValue.value.text.toDoubleOrNull() ?: 0.0
+            val type = type.value.text.toString() ?: " "
+            val hours = hours.value.text.toDoubleOrNull() ?: 0.0
             dbHandler.addNewCourse(
-                emissionFactor,
+                emissionFactor.toDouble(),
                 emissionValue,
-                date.value.text
+                date.value.text,
+                type,
+                hours
             )
             Toast.makeText(context, "Emission added to Database", Toast.LENGTH_SHORT).show()
         }) {

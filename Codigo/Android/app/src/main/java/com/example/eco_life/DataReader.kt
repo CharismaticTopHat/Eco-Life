@@ -87,6 +87,20 @@ fun EmissionDataList(context: Context) {
                         modifier = Modifier.padding(4.dp),
                         color = Color.Black, textAlign = TextAlign.Center
                     )
+                    Spacer(modifier = Modifier.width(5.dp))
+
+                    Text(
+                        text = "Emission Date: ${item.type}",
+                        modifier = Modifier.padding(4.dp),
+                        color = Color.Black, textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+
+                    Text(
+                        text = "Emission Date: ${item.hours}",
+                        modifier = Modifier.padding(4.dp),
+                        color = Color.Black, textAlign = TextAlign.Center
+                    )
                 }
             }
         }
