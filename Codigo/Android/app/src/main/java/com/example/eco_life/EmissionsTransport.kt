@@ -217,7 +217,7 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
                     .fillMaxWidth()
                     .padding(
                         top = 240.dp,
-                        start = 16.dp,
+                        start = 44.dp,
                         end = 20.dp
                     ),
                 verticalAlignment = Alignment.CenterVertically
@@ -231,7 +231,7 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
                             .clip(RoundedCornerShape(buttonCornerRadius))
                             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Gray,
+                            backgroundColor = beige,
                             contentColor = headerGreen
                         )
                     ) {
@@ -274,34 +274,826 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MotorcycleEmissions(onValueSelected: (Double) -> Unit) {
+    val context = LocalContext.current
+    val beige = Color(230,230,230)
+    val headerGreen = Color(17,109,29)
+    val textSize = 16.sp
+    val customColor = Color(30, 132, 73 )
+    val buttonCornerRadius = 12.dp
+    val emissionFactor = 1.7
+    val emissionValue = 0.05
+    val type = "Transport"
+    var hours by remember { mutableStateOf("") }
+    var isInputValid by remember { mutableStateOf(true) }
 
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = hours,
+                onValueChange = { input ->
+                    hours = input
+                    isInputValid = input.toDoubleOrNull() != null
+                },
+                label = { Text("Ingrese las horas (Decimal): ") },
+                isError = !isInputValid,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!isInputValid) {
+                Text(
+                    text = "Por favor, ingrese un valor con decimal.",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 100.dp,
+                        start = 44.dp,
+                        end = 20.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Button(
+                        onClick = {
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = beige,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Cancelar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.Black
+                        )
+                    }
+                }
+
+                Column {
+                    Button(
+                        onClick = {
+                            val hoursDouble = hours.toDoubleOrNull()
+                            if (hoursDouble != null) {
+                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                            }
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Green,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Continuar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BicycleEmissions(onValueSelected: (Double) -> Unit) {
+    val context = LocalContext.current
+    val beige = Color(230,230,230)
+    val headerGreen = Color(17,109,29)
+    val textSize = 16.sp
+    val customColor = Color(30, 132, 73 )
+    val buttonCornerRadius = 12.dp
+    var emissionFactor by remember { mutableStateOf(0.0) }
+    var emissionValue by remember { mutableStateOf(0.0) }
+    val type = "Transport"
+    var hours by remember { mutableStateOf("") }
+    var isInputValid by remember { mutableStateOf(true) }
 
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Column {
+            Button(
+                onClick = {
+                    emissionFactor = 0.0
+                    emissionValue = 0.0
+                    onValueSelected(emissionFactor)
+                },
+                modifier = Modifier
+                    .height(80.dp)
+                    .clip(RoundedCornerShape(buttonCornerRadius))
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = customColor,
+                    contentColor = headerGreen
+                )
+            ) {
+                Text(
+                    text = "Regular",
+                    fontSize = textSize,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.White
+                )
+            }
+        }
+        Column {
+            Button(
+                onClick = {
+                    emissionFactor = 0.05
+                    emissionValue = 0.01
+                    onValueSelected(emissionFactor)
+                },
+                modifier = Modifier
+                    .height(80.dp)
+                    .clip(RoundedCornerShape(buttonCornerRadius))
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = customColor,
+                    contentColor = headerGreen
+                )
+            ) {
+                Text(
+                    text = "Eléctrica",
+                    fontSize = textSize,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.White
+                )
+            }
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 40.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 70.dp, start = 16.dp, end = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = hours,
+                onValueChange = { input ->
+                    hours = input
+                    isInputValid = input.toDoubleOrNull() != null
+                },
+                label = { Text("Ingrese las horas (Decimal): ") },
+                isError = !isInputValid,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!isInputValid) {
+                Text(
+                    text = "Por favor, ingrese un valor con decimal.",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 90.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 100.dp,
+                        start = 44.dp,
+                        end = 20.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Button(
+                        onClick = {
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = beige,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Cancelar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.Black
+                        )
+                    }
+                }
+
+                Column {
+                    Button(
+                        onClick = {
+                            val hoursDouble = hours.toDoubleOrNull()
+                            if (hoursDouble != null) {
+                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                            }
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Green,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Continuar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScooterEmissions(onValueSelected: (Double) -> Unit) {
+    val context = LocalContext.current
+    val beige = Color(230,230,230)
+    val headerGreen = Color(17,109,29)
+    val textSize = 16.sp
+    val customColor = Color(30, 132, 73 )
+    val buttonCornerRadius = 12.dp
+    val emissionFactor = 0.02
+    val emissionValue = 0.005
+    val type = "Transport"
+    var hours by remember { mutableStateOf("") }
+    var isInputValid by remember { mutableStateOf(true) }
 
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = hours,
+                onValueChange = { input ->
+                    hours = input
+                    isInputValid = input.toDoubleOrNull() != null
+                },
+                label = { Text("Ingrese las horas (Decimal): ") },
+                isError = !isInputValid,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!isInputValid) {
+                Text(
+                    text = "Por favor, ingrese un valor con decimal.",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 100.dp,
+                        start = 44.dp,
+                        end = 20.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Button(
+                        onClick = {
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = beige,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Cancelar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.Black
+                        )
+                    }
+                }
+
+                Column {
+                    Button(
+                        onClick = {
+                            val hoursDouble = hours.toDoubleOrNull()
+                            if (hoursDouble != null) {
+                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                            }
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Green,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Continuar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TruckEmissions(){
+    val context = LocalContext.current
+    val beige = Color(230,230,230)
+    val headerGreen = Color(17,109,29)
+    val textSize = 16.sp
+    val customColor = Color(30, 132, 73 )
+    val buttonCornerRadius = 12.dp
+    val emissionFactor = 2.5
+    val emissionValue = 0.15
+    val type = "Transport"
+    var hours by remember { mutableStateOf("") }
+    var isInputValid by remember { mutableStateOf(true) }
 
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = hours,
+                onValueChange = { input ->
+                    hours = input
+                    isInputValid = input.toDoubleOrNull() != null
+                },
+                label = { Text("Ingrese las horas (Decimal): ") },
+                isError = !isInputValid,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!isInputValid) {
+                Text(
+                    text = "Por favor, ingrese un valor con decimal.",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 100.dp,
+                        start = 44.dp,
+                        end = 20.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Button(
+                        onClick = {
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = beige,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Cancelar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.Black
+                        )
+                    }
+                }
+
+                Column {
+                    Button(
+                        onClick = {
+                            val hoursDouble = hours.toDoubleOrNull()
+                            if (hoursDouble != null) {
+                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                            }
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Green,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Continuar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TrainEmissions(){
+    val context = LocalContext.current
+    val beige = Color(230,230,230)
+    val headerGreen = Color(17,109,29)
+    val textSize = 16.sp
+    val customColor = Color(30, 132, 73 )
+    val buttonCornerRadius = 12.dp
+    val emissionFactor = 0.1
+    val emissionValue = 0.03
+    val type = "Transport"
+    var hours by remember { mutableStateOf("") }
+    var isInputValid by remember { mutableStateOf(true) }
 
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = hours,
+                onValueChange = { input ->
+                    hours = input
+                    isInputValid = input.toDoubleOrNull() != null
+                },
+                label = { Text("Ingrese las horas (Decimal): ") },
+                isError = !isInputValid,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!isInputValid) {
+                Text(
+                    text = "Por favor, ingrese un valor con decimal.",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 100.dp,
+                        start = 44.dp,
+                        end = 20.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Button(
+                        onClick = {
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = beige,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Cancelar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.Black
+                        )
+                    }
+                }
+
+                Column {
+                    Button(
+                        onClick = {
+                            val hoursDouble = hours.toDoubleOrNull()
+                            if (hoursDouble != null) {
+                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                            }
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Green,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Continuar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BusEmissions(){
+    val context = LocalContext.current
+    val beige = Color(230,230,230)
+    val headerGreen = Color(17,109,29)
+    val textSize = 16.sp
+    val customColor = Color(30, 132, 73 )
+    val buttonCornerRadius = 12.dp
+    val emissionFactor = 0.1
+    val emissionValue = 0.04
+    val type = "Transport"
+    var hours by remember { mutableStateOf("") }
+    var isInputValid by remember { mutableStateOf(true) }
 
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = hours,
+                onValueChange = { input ->
+                    hours = input
+                    isInputValid = input.toDoubleOrNull() != null
+                },
+                label = { Text("Ingrese las horas (Decimal): ") },
+                isError = !isInputValid,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!isInputValid) {
+                Text(
+                    text = "Por favor, ingrese un valor con decimal.",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 100.dp,
+                        start = 44.dp,
+                        end = 20.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Button(
+                        onClick = {
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = beige,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Cancelar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.Black
+                        )
+                    }
+                }
+
+                Column {
+                    Button(
+                        onClick = {
+                            val hoursDouble = hours.toDoubleOrNull()
+                            if (hoursDouble != null) {
+                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                            }
+                        },
+                        modifier = Modifier
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(buttonCornerRadius))
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Green,
+                            contentColor = headerGreen
+                        )
+                    ) {
+                        Text(
+                            text = "Continuar",
+                            fontSize = textSize,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -311,12 +1103,8 @@ fun EmissionsTransportMenu(){
     val beige = Color(230,230,230)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val textHeight = textSize.value.dp
-    val customColor = Color(30, 132, 73 )
-    val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0) }
     var selectedScreen by remember { mutableStateOf<@Composable () -> Unit>({}) }
-    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -373,7 +1161,7 @@ fun EmissionsTransportMenu(){
                     Box(
                         modifier = Modifier
                             .size(60.dp)
-                            .background(Color.Gray, shape = CircleShape)
+                            .background(beige, shape = CircleShape)
                             .clickable {
                                 selectedScreen =
                                     getComposableScreen(value) { selectedemissionFactor ->
@@ -417,7 +1205,7 @@ fun EmissionsTransportMenu(){
                     Box(
                         modifier = Modifier
                             .size(60.dp)
-                            .background(Color.Gray, shape = CircleShape)
+                            .background(beige, shape = CircleShape)
                             .clickable {
                                 emissionFactor = value
                             },
@@ -460,6 +1248,9 @@ fun getComposableScreen(emissionFactor: Int, onValueSelected: (Double) -> Unit):
         2 -> { { MotorcycleEmissions(onValueSelected) } }
         3 -> { { BicycleEmissions(onValueSelected) } }
         4 -> { { ScooterEmissions(onValueSelected) } }
+        5 -> { { TruckEmissions()} }
+        6 -> { { TrainEmissions()} }
+        7 -> { { BusEmissions()}}
         else -> { {} }
     }
 }
