@@ -59,7 +59,8 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
     val textSize = 16.sp
     val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
-    var selectedValue by remember { mutableStateOf(0.0) }
+    var emissionFactor by remember { mutableStateOf(0.0) }
+    var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Transport"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
@@ -78,8 +79,9 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
         Column {
             Button(
                 onClick = {
-                    selectedValue = 2.3
-                    onValueSelected(selectedValue)
+                    emissionFactor = 2.3
+                    emissionValue = 0.12
+                    onValueSelected(emissionFactor)
                 },
                 modifier = Modifier
                     .height(80.dp)
@@ -101,8 +103,9 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
         Column {
             Button(
                 onClick = {
-                    selectedValue = 2.7
-                    onValueSelected(selectedValue)
+                    emissionFactor = 2.7
+                    emissionValue = 0.1
+                    onValueSelected(emissionFactor)
                 },
                 modifier = Modifier
                     .height(80.dp)
@@ -137,8 +140,9 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
         Column {
             Button(
                 onClick = {
-                    selectedValue = 0.8
-                    onValueSelected(selectedValue)
+                    emissionFactor = 0.8
+                    emissionValue = 0.04
+                    onValueSelected(emissionFactor)
                 },
                 modifier = Modifier
                     .height(80.dp)
@@ -244,8 +248,8 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
                     Button(
                         onClick = {
                             val hoursDouble = hours.toDoubleOrNull()
-                            if (selectedValue != 0.0 && hoursDouble != null) {
-                                saveToDatabase(context, selectedValue, type, hoursDouble)
+                            if (emissionFactor != 0.0 && hoursDouble != null) {
+                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -269,7 +273,6 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
         }
     }
 }
-
 
 @Composable
 fun MotorcycleEmissions(onValueSelected: (Double) -> Unit) {
@@ -311,7 +314,7 @@ fun EmissionsTransportMenu(){
     val textHeight = textSize.value.dp
     val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
-    var selectedValue by remember { mutableStateOf(0) }
+    var emissionFactor by remember { mutableStateOf(0) }
     var selectedScreen by remember { mutableStateOf<@Composable () -> Unit>({}) }
     val context = LocalContext.current
 
@@ -373,8 +376,8 @@ fun EmissionsTransportMenu(){
                             .background(Color.Gray, shape = CircleShape)
                             .clickable {
                                 selectedScreen =
-                                    getComposableScreen(value) { selectedEmissionValue ->
-                                        selectedValue = selectedEmissionValue.toInt()
+                                    getComposableScreen(value) { selectedemissionFactor ->
+                                        emissionFactor = selectedemissionFactor.toInt()
                                     }
                             },
                         contentAlignment = Alignment.Center
@@ -416,7 +419,7 @@ fun EmissionsTransportMenu(){
                             .size(60.dp)
                             .background(Color.Gray, shape = CircleShape)
                             .clickable {
-                                selectedValue = value
+                                emissionFactor = value
                             },
                         contentAlignment = Alignment.Center
                     ) {
@@ -438,26 +441,21 @@ fun EmissionsTransportMenu(){
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun saveToDatabase(context: Context, selectedValue: Double, type: String, hours: Double) {
+fun saveToDatabase(context: Context, emissionFactor: Double,emissionValue: Double, type: String, hours: Double) {
     val dbHandler = DBHandler(context)
-
-    val emissionValue = when (selectedValue) {
-        1.0 -> 0.25 // car
-        2.0 -> 0.5  // boat
-        3.0 -> 0.75 // plane
-        4.0 -> 1.0  // more
-        else -> 0.0
-    }
-
     val currentDate = LocalDate.now().toString()
 
-    dbHandler.addNewCourse(selectedValue, emissionValue, currentDate, type, hours)
-    Toast.makeText(context, "Saved value $selectedValue with additional $emissionValue on $currentDate of type $type with $hours hours", Toast.LENGTH_SHORT).show()
+    dbHandler.addEmission(emissionFactor, emissionValue, currentDate, type, hours)
+    Toast.makeText(
+        context,
+        "Factor: $emissionFactor, Value: $emissionValue on $currentDate of type $type with $hours hours",
+        Toast.LENGTH_SHORT
+    ).show()
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getComposableScreen(selectedValue: Int, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
-    return when (selectedValue) {
+fun getComposableScreen(emissionFactor: Int, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
+    return when (emissionFactor) {
         1 -> { { CarEmissions(onValueSelected) } }
         2 -> { { MotorcycleEmissions(onValueSelected) } }
         3 -> { { BicycleEmissions(onValueSelected) } }

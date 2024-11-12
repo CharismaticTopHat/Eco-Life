@@ -20,7 +20,7 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         db.execSQL(query)
     }
 
-    fun addNewCourse(
+    fun addEmission(
         emissionFactor: Double,
         emissionValue: Double,
         emissionDate: String,

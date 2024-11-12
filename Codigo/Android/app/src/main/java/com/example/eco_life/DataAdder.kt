@@ -159,7 +159,7 @@ fun AddDataToDatabase(
             val emissionValue = emissionValue.value.text.toDoubleOrNull() ?: 0.0
             val type = type.value.text.toString() ?: " "
             val hours = hours.value.text.toDoubleOrNull() ?: 0.0
-            dbHandler.addNewCourse(
+            dbHandler.addEmission(
                 emissionFactor.toDouble(),
                 emissionValue,
                 date.value.text,
