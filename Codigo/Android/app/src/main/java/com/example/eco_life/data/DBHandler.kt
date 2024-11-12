@@ -12,8 +12,8 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
     override fun onCreate(db: SQLiteDatabase) {
         val query = ("CREATE TABLE $TABLE_NAME ("
                 + "$ID_COL INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "$FACTOR_COL REAL, "
-                + "$VALUE_COL REAL, "
+                + "$EMISSION_FACTOR_COL REAL, "
+                + "$EMISSION_VALUE_COL REAL, "
                 + "$DATE_COL TEXT, "
                 + "$TYPE_COL TEXT, "
                 + "$HOURS_COL REAL)")
@@ -29,8 +29,8 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
     ) {
         val db = this.writableDatabase
         val values = ContentValues()
-        values.put(FACTOR_COL, emissionFactor)
-        values.put(VALUE_COL, emissionValue)
+        values.put(EMISSION_FACTOR_COL, emissionFactor)
+        values.put(EMISSION_VALUE_COL, emissionValue)
         values.put(DATE_COL, emissionDate)
         values.put(TYPE_COL, type)
         values.put(HOURS_COL, hours)
@@ -55,8 +55,8 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
             do {
                 val emission = EmissionModel(
                     id = cursor.getInt(cursor.getColumnIndexOrThrow(ID_COL)),
-                    emissionFactor = cursor.getDouble(cursor.getColumnIndexOrThrow(FACTOR_COL)),
-                    emissionValue = cursor.getDouble(cursor.getColumnIndexOrThrow(VALUE_COL)),
+                    emissionFactor = cursor.getDouble(cursor.getColumnIndexOrThrow(EMISSION_FACTOR_COL)),
+                    emissionValue = cursor.getDouble(cursor.getColumnIndexOrThrow(EMISSION_VALUE_COL)),
                     emissionDate = cursor.getString(cursor.getColumnIndexOrThrow(DATE_COL)),
                     type = cursor.getString(cursor.getColumnIndexOrThrow(TYPE_COL)),
                     hours = cursor.getDouble(cursor.getColumnIndexOrThrow(HOURS_COL))
@@ -77,10 +77,10 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
     companion object {
         private const val DB_NAME = "Eco-Life"
         private const val DB_VERSION = 1
-        private const val TABLE_NAME = "trashEmission"
+        private const val TABLE_NAME = "emissions"
         private const val ID_COL = "id"
-        private const val FACTOR_COL = "trashFactor"
-        private const val VALUE_COL = "trashValue"
+        private const val EMISSION_FACTOR_COL = "factor"
+        private const val EMISSION_VALUE_COL = "emissionValue"
         private const val DATE_COL = "date"
         private const val TYPE_COL = "type"
         private const val HOURS_COL = "hours"

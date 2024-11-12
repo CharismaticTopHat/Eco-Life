@@ -61,7 +61,8 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
     val buttonCornerRadius = 12.dp
     var selectedValue by remember { mutableStateOf(0.0) }
     val type = "Transport"
-    var hours by remember { mutableStateOf(0.0) }
+    var hours by remember { mutableStateOf("") }
+    var isInputValid by remember { mutableStateOf(true) }
 
     Row(
         modifier = Modifier
@@ -157,7 +158,41 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
             }
         }
     }
-
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 24.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 160.dp, start = 16.dp, end = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = hours,
+                onValueChange = { input ->
+                    hours = input
+                    isInputValid = input.toDoubleOrNull() != null
+                },
+                label = { Text("Ingrese las horas (Decimal): ") },
+                isError = !isInputValid,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!isInputValid) {
+                Text(
+                    text = "Por favor, ingrese un valor con decimal.",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -177,7 +212,7 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        top = 200.dp,
+                        top = 240.dp,
                         start = 16.dp,
                         end = 20.dp
                     ),
@@ -208,8 +243,9 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
-                            if (selectedValue != 0.0) {
-                                saveToDatabase(context, selectedValue, type, hours)
+                            val hoursDouble = hours.toDoubleOrNull()
+                            if (selectedValue != 0.0 && hoursDouble != null) {
+                                saveToDatabase(context, selectedValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -416,7 +452,7 @@ fun saveToDatabase(context: Context, selectedValue: Double, type: String, hours:
     val currentDate = LocalDate.now().toString()
 
     dbHandler.addNewCourse(selectedValue, emissionValue, currentDate, type, hours)
-    Toast.makeText(context, "Saved value $selectedValue with additional $emissionValue on $currentDate", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, "Saved value $selectedValue with additional $emissionValue on $currentDate of type $type with $hours hours", Toast.LENGTH_SHORT).show()
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

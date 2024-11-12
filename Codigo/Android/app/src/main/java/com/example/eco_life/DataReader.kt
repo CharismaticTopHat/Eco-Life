@@ -58,49 +58,60 @@ fun EmissionDataList(context: Context) {
     val emissionList = dbHandler.readEmissions()
 
     LazyColumn {
-        itemsIndexed(emissionList) { _, item ->
-            Card(
-                modifier = Modifier.padding(8.dp),
-                elevation = 6.dp
-            ) {
-                Column(
-                    modifier = Modifier.padding(8.dp).fillMaxWidth(),
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Center
+        if (emissionList.isEmpty()) {
+            item {
+                Text(
+                    text = "No emissions data available",
+                    modifier = Modifier.padding(16.dp),
+                    textAlign = TextAlign.Center,
+                    color = Color.Gray
+                )
+            }
+        } else {
+            itemsIndexed(emissionList) { _, item ->
+                Card(
+                    modifier = Modifier.padding(8.dp),
+                    elevation = 6.dp
                 ) {
-                    Text(
-                        text = "Emission Factor: ${item.emissionFactor}",
-                        modifier = Modifier.padding(4.dp),
-                        color = Color.Black, textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
+                    Column(
+                        modifier = Modifier.padding(8.dp).fillMaxWidth(),
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Emission Factor: ${item.emissionFactor}",
+                            modifier = Modifier.padding(4.dp),
+                            color = Color.Black, textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
 
-                    Text(
-                        text = "Emission Value: ${item.emissionValue}",
-                        modifier = Modifier.padding(4.dp),
-                        color = Color.Black, textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
+                        Text(
+                            text = "Emission Value: ${item.emissionValue}",
+                            modifier = Modifier.padding(4.dp),
+                            color = Color.Black, textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
 
-                    Text(
-                        text = "Emission Date: ${item.emissionDate}",
-                        modifier = Modifier.padding(4.dp),
-                        color = Color.Black, textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
+                        Text(
+                            text = "Emission Date: ${item.emissionDate}",
+                            modifier = Modifier.padding(4.dp),
+                            color = Color.Black, textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
 
-                    Text(
-                        text = "Emission Date: ${item.type}",
-                        modifier = Modifier.padding(4.dp),
-                        color = Color.Black, textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
+                        Text(
+                            text = "Emission Type: ${item.type}",
+                            modifier = Modifier.padding(4.dp),
+                            color = Color.Black, textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
 
-                    Text(
-                        text = "Emission Date: ${item.hours}",
-                        modifier = Modifier.padding(4.dp),
-                        color = Color.Black, textAlign = TextAlign.Center
-                    )
+                        Text(
+                            text = "Emission Hours: ${item.hours}",
+                            modifier = Modifier.padding(4.dp),
+                            color = Color.Black, textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
         }
