@@ -105,9 +105,9 @@ fun KitchenEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonWithText("Abrelatas", onClick = { emissionFactor = 0.03; emissionValue = 0.06 })
-        ButtonWithText("Exprimidor", onClick = { emissionFactor = 0.02; emissionValue = 0.15 })
-        ButtonWithText("Batidora", onClick = { emissionFactor = 0.09; emissionValue = 1.8 })
+        ButtonEnergyEmissions("Abrelatas", onClick = { emissionFactor = 0.03; emissionValue = 0.06 })
+        ButtonEnergyEmissions("Exprimidor", onClick = { emissionFactor = 0.02; emissionValue = 0.15 })
+        ButtonEnergyEmissions("Batidora", onClick = { emissionFactor = 0.09; emissionValue = 1.8 })
     }
 
     Row(
@@ -121,9 +121,9 @@ fun KitchenEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonWithText("Licuadora", onClick = { emissionFactor = 0.03; emissionValue = 0.06 })
-        ButtonWithText("Tostadora", onClick = { emissionFactor = 0.02; emissionValue = 0.15 })
-        ButtonWithText("Horno Eléctrico", onClick = { emissionFactor = 0.09; emissionValue = 1.8 })
+        ButtonEnergyEmissions("Licuadora", onClick = { emissionFactor = 0.03; emissionValue = 0.06 })
+        ButtonEnergyEmissions("Tostadora", onClick = { emissionFactor = 0.02; emissionValue = 0.15 })
+        ButtonEnergyEmissions("Horno Eléctrico", onClick = { emissionFactor = 0.09; emissionValue = 1.8 })
     }
     Row(
         modifier = Modifier
@@ -136,9 +136,9 @@ fun KitchenEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonWithText("Microondas", onClick = { emissionFactor = 0.03; emissionValue = 0.06 })
-        ButtonWithText("Cafetera", onClick = { emissionFactor = 0.02; emissionValue = 0.15 })
-        ButtonWithText("Plancha", onClick = { emissionFactor = 0.09; emissionValue = 1.8 })
+        ButtonEnergyEmissions("Microondas", onClick = { emissionFactor = 0.03; emissionValue = 0.06 })
+        ButtonEnergyEmissions("Cafetera", onClick = { emissionFactor = 0.02; emissionValue = 0.15 })
+        ButtonEnergyEmissions("Plancha", onClick = { emissionFactor = 0.09; emissionValue = 1.8 })
     }
     Row(
         modifier = Modifier
@@ -278,9 +278,9 @@ fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonWithText("Cosedora", onClick = { emissionFactor = 0.12; emissionValue = 2.3 })
-        ButtonWithText("Bomba de agua", onClick = { emissionFactor = 0.2; emissionValue = 5.0 })
-        ButtonWithText("Lavadora", onClick = { emissionFactor = 0.25; emissionValue = 13.0 })
+        ButtonEnergyEmissions("Cosedora", onClick = { emissionFactor = 0.12; emissionValue = 2.3 })
+        ButtonEnergyEmissions("Bomba de agua", onClick = { emissionFactor = 0.2; emissionValue = 5.0 })
+        ButtonEnergyEmissions("Lavadora", onClick = { emissionFactor = 0.25; emissionValue = 13.0 })
     }
 
     Row(
@@ -294,9 +294,9 @@ fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonWithText("Secadora", onClick = { emissionFactor = 0.3; emissionValue = 9.0 })
-        ButtonWithText("Aspiradora (Horizontal)", onClick = { emissionFactor = 0.4; emissionValue = 13.0 })
-        ButtonWithText("Aspiradora (Vertical)", onClick = { emissionFactor = 0.5; emissionValue = 16.0 })
+        ButtonEnergyEmissions("Secadora", onClick = { emissionFactor = 0.3; emissionValue = 9.0 })
+        ButtonEnergyEmissions("Aspiradora (Horizontal)", onClick = { emissionFactor = 0.4; emissionValue = 13.0 })
+        ButtonEnergyEmissions("Aspiradora (Vertical)", onClick = { emissionFactor = 0.5; emissionValue = 16.0 })
     }
     Row(
         modifier = Modifier
@@ -309,8 +309,8 @@ fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonWithText("Ventilador (Mesa)", onClick = { emissionFactor = 0.04; emissionValue = 16.0 })
-        ButtonWithText("Ventilador (Techo)", onClick = { emissionFactor = 0.04; emissionValue = 16.0 })
+        ButtonEnergyEmissions("Ventilador (Mesa)", onClick = { emissionFactor = 0.04; emissionValue = 16.0 })
+        ButtonEnergyEmissions("Ventilador (Techo)", onClick = { emissionFactor = 0.04; emissionValue = 16.0 })
     }
     Row(
         modifier = Modifier
@@ -450,9 +450,9 @@ fun EntertainmentEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonWithText("Videocasetera", onClick = { emissionFactor = 0.1; emissionValue = 1.2 })
-        ButtonWithText("Tocadiscos", onClick = { emissionFactor = 0.1; emissionValue = 2.5 })
-        ButtonWithText("Estéreo", onClick = { emissionFactor = 0.04; emissionValue = 9.0 })
+        ButtonEnergyEmissions("Videocasetera", onClick = { emissionFactor = 0.1; emissionValue = 1.2 })
+        ButtonEnergyEmissions("Tocadiscos", onClick = { emissionFactor = 0.1; emissionValue = 2.5 })
+        ButtonEnergyEmissions("Estéreo", onClick = { emissionFactor = 0.04; emissionValue = 9.0 })
     }
 
     Row(
@@ -466,9 +466,9 @@ fun EntertainmentEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonWithText("Radio grabadora", onClick = { emissionFactor = 0.04; emissionValue = 8.0 })
-        ButtonWithText("Consola (Videojuegos)", onClick = { emissionFactor = 0.25; emissionValue = 30.0 })
-        ButtonWithText("Computadora", onClick = { emissionFactor = 0.3; emissionValue = 36.0 })
+        ButtonEnergyEmissions("Radio grabadora", onClick = { emissionFactor = 0.04; emissionValue = 8.0 })
+        ButtonEnergyEmissions("Consola (Videojuegos)", onClick = { emissionFactor = 0.25; emissionValue = 30.0 })
+        ButtonEnergyEmissions("Computadora", onClick = { emissionFactor = 0.3; emissionValue = 36.0 })
     }
     Row(
         modifier = Modifier
@@ -481,9 +481,9 @@ fun EntertainmentEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonWithText("TV (13\"-17\")", onClick = { emissionFactor = 0.05; emissionValue = 10.0 })
-        ButtonWithText("TV (19\"-21\")", onClick = { emissionFactor = 0.07; emissionValue = 21.0 })
-        ButtonWithText("TV (24\"-29\")", onClick = { emissionFactor = 0.12; emissionValue = 22.0 })
+        ButtonEnergyEmissions("TV (13\"-17\")", onClick = { emissionFactor = 0.05; emissionValue = 10.0 })
+        ButtonEnergyEmissions("TV (19\"-21\")", onClick = { emissionFactor = 0.07; emissionValue = 21.0 })
+        ButtonEnergyEmissions("TV (24\"-29\")", onClick = { emissionFactor = 0.12; emissionValue = 22.0 })
     }
     Row(
         modifier = Modifier
@@ -623,9 +623,9 @@ fun RefrigerationEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonWithText("Refrigerador (11'-12')", onClick = { emissionFactor = 0.2; emissionValue = 60.0 })
-        ButtonWithText("Refrigerador (14'-16')", onClick = { emissionFactor = 0.23; emissionValue = 70.0 })
-        ButtonWithText("Refrigerador (18'-22')", onClick = { emissionFactor = 0.25; emissionValue = 90.0 })
+        ButtonEnergyEmissions("Refrigerador (11'-12')", onClick = { emissionFactor = 0.2; emissionValue = 60.0 })
+        ButtonEnergyEmissions("Refrigerador (14'-16')", onClick = { emissionFactor = 0.23; emissionValue = 70.0 })
+        ButtonEnergyEmissions("Refrigerador (18'-22')", onClick = { emissionFactor = 0.25; emissionValue = 90.0 })
     }
     Row(
         modifier = Modifier
@@ -638,9 +638,9 @@ fun RefrigerationEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonWithText("Congelador", onClick = { emissionFactor = 0.3; emissionValue = 96.0 })
-        ButtonWithText("Climatizador (Minisplit)", onClick = { emissionFactor = 0.35; emissionValue = 278.0 })
-        ButtonWithText("Climatizador (Ventana)", onClick = { emissionFactor = 0.3; emissionValue = 288.0 })
+        ButtonEnergyEmissions("Congelador", onClick = { emissionFactor = 0.3; emissionValue = 96.0 })
+        ButtonEnergyEmissions("Climatizador (Minisplit)", onClick = { emissionFactor = 0.35; emissionValue = 278.0 })
+        ButtonEnergyEmissions("Climatizador (Ventana)", onClick = { emissionFactor = 0.3; emissionValue = 288.0 })
     }
     Row(
         modifier = Modifier
@@ -869,7 +869,7 @@ fun getEnergyScreen(emissionFactor: Int, onValueSelected: (Double) -> Unit): @Co
 }
 
 @Composable
-fun ButtonWithText(
+fun ButtonEnergyEmissions(
     text: String,
     onClick: () -> Unit,
     buttonWidth: Dp = 110.dp,
