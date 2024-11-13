@@ -83,16 +83,17 @@ class EmissionsEnergyActivity : ComponentActivity() {
 @Composable
 fun KitchenEmissions(onValueSelected: (Double) -> Unit) {
     val context = LocalContext.current
-    val beige = Color(230,230,230)
+    val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
+    val green = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Energy"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Row(
         modifier = Modifier
@@ -105,9 +106,33 @@ fun KitchenEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Abrelatas", onClick = { emissionFactor = 0.03; emissionValue = 0.06 })
-        ButtonEnergyEmissions("Exprimidor", onClick = { emissionFactor = 0.02; emissionValue = 0.15 })
-        ButtonEnergyEmissions("Batidora", onClick = { emissionFactor = 0.09; emissionValue = 1.8 })
+        ButtonEnergyEmissions(
+            text = "Abrelatas",
+            onClick = {
+                selectedButton = 0
+                emissionFactor = 0.03
+                emissionValue = 0.06
+            },
+            customColor = if (selectedButton == 0) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Exprimidor",
+            onClick = {
+                selectedButton = 1
+                emissionFactor = 0.02
+                emissionValue = 0.15
+            },
+            customColor = if (selectedButton == 1) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Batidora",
+            onClick = {
+                selectedButton = 2
+                emissionFactor = 0.09
+                emissionValue = 1.8
+            },
+            customColor = if (selectedButton == 2) green else beige
+        )
     }
 
     Row(
@@ -121,9 +146,33 @@ fun KitchenEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Licuadora", onClick = { emissionFactor = 0.03; emissionValue = 0.06 })
-        ButtonEnergyEmissions("Tostadora", onClick = { emissionFactor = 0.02; emissionValue = 0.15 })
-        ButtonEnergyEmissions("Horno Eléctrico", onClick = { emissionFactor = 0.09; emissionValue = 1.8 })
+        ButtonEnergyEmissions(
+            text = "Licuadora",
+            onClick = {
+                selectedButton = 3
+                emissionFactor = 0.03
+                emissionValue = 0.06
+            },
+            customColor = if (selectedButton == 3) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Tostadora",
+            onClick = {
+                selectedButton = 4
+                emissionFactor = 0.02
+                emissionValue = 0.15
+            },
+            customColor = if (selectedButton == 4) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Horno Eléctrico",
+            onClick = {
+                selectedButton = 5
+                emissionFactor = 0.09
+                emissionValue = 1.8
+            },
+            customColor = if (selectedButton == 5) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -136,9 +185,33 @@ fun KitchenEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Microondas", onClick = { emissionFactor = 0.03; emissionValue = 0.06 })
-        ButtonEnergyEmissions("Cafetera", onClick = { emissionFactor = 0.02; emissionValue = 0.15 })
-        ButtonEnergyEmissions("Plancha", onClick = { emissionFactor = 0.09; emissionValue = 1.8 })
+        ButtonEnergyEmissions(
+            text = "Microondas",
+            onClick = {
+                selectedButton = 6
+                emissionFactor = 0.03
+                emissionValue = 0.06
+            },
+            customColor = if (selectedButton == 6) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Cafetera",
+            onClick = {
+                selectedButton = 7
+                emissionFactor = 0.02
+                emissionValue = 0.15
+            },
+            customColor = if (selectedButton == 7) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Plancha",
+            onClick = {
+                selectedButton = 8
+                emissionFactor = 0.09
+                emissionValue = 1.8
+            },
+            customColor = if (selectedButton == 8) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -256,16 +329,17 @@ fun KitchenEmissions(onValueSelected: (Double) -> Unit) {
 @Composable
 fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit) {
     val context = LocalContext.current
-    val beige = Color(230,230,230)
+    val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
+    val green = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Energy"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Row(
         modifier = Modifier
@@ -278,9 +352,33 @@ fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Cosedora", onClick = { emissionFactor = 0.12; emissionValue = 2.3 })
-        ButtonEnergyEmissions("Bomba de agua", onClick = { emissionFactor = 0.2; emissionValue = 5.0 })
-        ButtonEnergyEmissions("Lavadora", onClick = { emissionFactor = 0.25; emissionValue = 13.0 })
+        ButtonEnergyEmissions(
+            text = "Cosedora",
+            onClick = {
+                selectedButton = 0
+                emissionFactor = 0.12
+                emissionValue = 2.3
+            },
+            customColor = if (selectedButton == 0) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Bomba de agua",
+            onClick = {
+                selectedButton = 1
+                emissionFactor = 0.2
+                emissionValue = 5.0
+            },
+            customColor = if (selectedButton == 1) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Lavadora",
+            onClick = {
+                selectedButton = 2
+                emissionFactor = 0.25
+                emissionValue = 13.0
+            },
+            customColor = if (selectedButton == 2) green else beige
+        )
     }
 
     Row(
@@ -294,9 +392,33 @@ fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Secadora", onClick = { emissionFactor = 0.3; emissionValue = 9.0 })
-        ButtonEnergyEmissions("Aspiradora (Horizontal)", onClick = { emissionFactor = 0.4; emissionValue = 13.0 })
-        ButtonEnergyEmissions("Aspiradora (Vertical)", onClick = { emissionFactor = 0.5; emissionValue = 16.0 })
+        ButtonEnergyEmissions(
+            text = "Secadora",
+            onClick = {
+                selectedButton = 3
+                emissionFactor = 0.3
+                emissionValue = 9.0
+            },
+            customColor = if (selectedButton == 3) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Aspiradora (Horizontal)",
+            onClick = {
+                selectedButton = 4
+                emissionFactor = 0.4
+                emissionValue = 13.0
+            },
+            customColor = if (selectedButton == 4) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Aspiradora (Vertical=",
+            onClick = {
+                selectedButton = 5
+                emissionFactor = 0.5
+                emissionValue = 16.0
+            },
+            customColor = if (selectedButton == 5) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -309,8 +431,24 @@ fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Ventilador (Mesa)", onClick = { emissionFactor = 0.04; emissionValue = 16.0 })
-        ButtonEnergyEmissions("Ventilador (Techo)", onClick = { emissionFactor = 0.04; emissionValue = 16.0 })
+        ButtonEnergyEmissions(
+            text = "Abrelatas",
+            onClick = {
+                selectedButton = 7
+                emissionFactor = 0.04
+                emissionValue = 16.0
+            },
+            customColor = if (selectedButton == 7) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Exprimidor",
+            onClick = {
+                selectedButton = 8
+                emissionFactor = 0.04
+                emissionValue = 16.0
+            },
+            customColor = if (selectedButton == 8) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -428,16 +566,17 @@ fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit) {
 @Composable
 fun EntertainmentEmissions(onValueSelected: (Double) -> Unit) {
     val context = LocalContext.current
-    val beige = Color(230,230,230)
+    val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
+    val green = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Energy"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Row(
         modifier = Modifier
@@ -450,9 +589,33 @@ fun EntertainmentEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Videocasetera", onClick = { emissionFactor = 0.1; emissionValue = 1.2 })
-        ButtonEnergyEmissions("Tocadiscos", onClick = { emissionFactor = 0.1; emissionValue = 2.5 })
-        ButtonEnergyEmissions("Estéreo", onClick = { emissionFactor = 0.04; emissionValue = 9.0 })
+        ButtonEnergyEmissions(
+            text = "Videocasetera",
+            onClick = {
+                selectedButton = 0
+                emissionFactor = 0.1
+                emissionValue = 1.2
+            },
+            customColor = if (selectedButton == 0) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Tocadiscos",
+            onClick = {
+                selectedButton = 1
+                emissionFactor = 0.1
+                emissionValue = 2.5
+            },
+            customColor = if (selectedButton == 1) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Estéreo",
+            onClick = {
+                selectedButton = 2
+                emissionFactor = 0.04
+                emissionValue = 9.0
+            },
+            customColor = if (selectedButton == 2) green else beige
+        )
     }
 
     Row(
@@ -466,9 +629,33 @@ fun EntertainmentEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Radio grabadora", onClick = { emissionFactor = 0.04; emissionValue = 8.0 })
-        ButtonEnergyEmissions("Consola (Videojuegos)", onClick = { emissionFactor = 0.25; emissionValue = 30.0 })
-        ButtonEnergyEmissions("Computadora", onClick = { emissionFactor = 0.3; emissionValue = 36.0 })
+        ButtonEnergyEmissions(
+            text = "Radiograbadora",
+            onClick = {
+                selectedButton = 3
+                emissionFactor = 0.04
+                emissionValue = 8.0
+            },
+            customColor = if (selectedButton == 3) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Consola (Videojuegos)",
+            onClick = {
+                selectedButton = 4
+                emissionFactor = 0.25
+                emissionValue = 30.0
+            },
+            customColor = if (selectedButton == 4) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Computadora",
+            onClick = {
+                selectedButton = 5
+                emissionFactor = 0.3
+                emissionValue = 36.0
+            },
+            customColor = if (selectedButton == 5) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -481,9 +668,33 @@ fun EntertainmentEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("TV (13\"-17\")", onClick = { emissionFactor = 0.05; emissionValue = 10.0 })
-        ButtonEnergyEmissions("TV (19\"-21\")", onClick = { emissionFactor = 0.07; emissionValue = 21.0 })
-        ButtonEnergyEmissions("TV (24\"-29\")", onClick = { emissionFactor = 0.12; emissionValue = 22.0 })
+        ButtonEnergyEmissions(
+            text = "TV (13\"-17\")",
+            onClick = {
+                selectedButton = 6
+                emissionFactor = 0.05
+                emissionValue = 10.0
+            },
+            customColor = if (selectedButton == 6) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "TV (19\"-21\")",
+            onClick = {
+                selectedButton = 7
+                emissionFactor = 0.07
+                emissionValue = 21.0
+            },
+            customColor = if (selectedButton == 7) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "TV (24\"-29\")",
+            onClick = {
+                selectedButton = 8
+                emissionFactor = 0.12
+                emissionValue = 22.0
+            },
+            customColor = if (selectedButton == 8) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -601,16 +812,17 @@ fun EntertainmentEmissions(onValueSelected: (Double) -> Unit) {
 @Composable
 fun RefrigerationEmissions(onValueSelected: (Double) -> Unit) {
     val context = LocalContext.current
-    val beige = Color(230,230,230)
+    val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
+    val green = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Energy"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Row(
         modifier = Modifier
@@ -623,9 +835,33 @@ fun RefrigerationEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Refrigerador (11'-12')", onClick = { emissionFactor = 0.2; emissionValue = 60.0 })
-        ButtonEnergyEmissions("Refrigerador (14'-16')", onClick = { emissionFactor = 0.23; emissionValue = 70.0 })
-        ButtonEnergyEmissions("Refrigerador (18'-22')", onClick = { emissionFactor = 0.25; emissionValue = 90.0 })
+        ButtonEnergyEmissions(
+            text = "Refrigerador (11'-12')",
+            onClick = {
+                selectedButton = 0
+                emissionFactor = 0.2
+                emissionValue = 60.0
+            },
+            customColor = if (selectedButton == 0) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Refrigerador (14'-16')",
+            onClick = {
+                selectedButton = 1
+                emissionFactor = 0.23
+                emissionValue = 70.0
+            },
+            customColor = if (selectedButton == 1) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Refrigerador (18'-22')",
+            onClick = {
+                selectedButton = 2
+                emissionFactor = 0.25
+                emissionValue = 90.0
+            },
+            customColor = if (selectedButton == 2) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -638,9 +874,33 @@ fun RefrigerationEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Congelador", onClick = { emissionFactor = 0.3; emissionValue = 96.0 })
-        ButtonEnergyEmissions("Climatizador (Minisplit)", onClick = { emissionFactor = 0.35; emissionValue = 278.0 })
-        ButtonEnergyEmissions("Climatizador (Ventana)", onClick = { emissionFactor = 0.3; emissionValue = 288.0 })
+        ButtonEnergyEmissions(
+            text = "Congelador",
+            onClick = {
+                selectedButton = 3
+                emissionFactor = 0.3
+                emissionValue = 96.0
+            },
+            customColor = if (selectedButton == 3) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Climatizador (Minisplit)",
+            onClick = {
+                selectedButton = 4
+                emissionFactor = 0.35
+                emissionValue = 278.0
+            },
+            customColor = if (selectedButton == 4) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Climatizador (Ventana)",
+            onClick = {
+                selectedButton = 5
+                emissionFactor = 0.3
+                emissionValue = 288.0
+            },
+            customColor = if (selectedButton == 5) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -875,9 +1135,9 @@ fun ButtonEnergyEmissions(
     buttonWidth: Dp = 110.dp,
     buttonHeight: Dp = 80.dp,
     maxFontSize: TextUnit = 11.sp,
-    customColor: Color = Color(30, 132, 73 ),
+    customColor: Color = Color(30, 132, 73),
     buttonCornerRadius: Dp = 12.dp,
-    headerGreen: Color = Color(17,109,29)
+    headerGreen: Color = Color(17, 109, 29)
 ) {
     Button(
         onClick = onClick,
