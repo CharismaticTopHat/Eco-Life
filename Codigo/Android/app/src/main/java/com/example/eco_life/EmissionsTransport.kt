@@ -249,7 +249,7 @@ fun CarEmissions(onValueSelected: (Double) -> Unit) {
                         onClick = {
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
-                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -376,7 +376,7 @@ fun MotorcycleEmissions(onValueSelected: (Double) -> Unit) {
                         onClick = {
                             val hoursDouble = hours.toDoubleOrNull()
                             if (hoursDouble != null) {
-                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -563,7 +563,7 @@ fun BicycleEmissions(onValueSelected: (Double) -> Unit) {
                         onClick = {
                             val hoursDouble = hours.toDoubleOrNull()
                             if (hoursDouble != null) {
-                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -690,7 +690,7 @@ fun ScooterEmissions(onValueSelected: (Double) -> Unit) {
                         onClick = {
                             val hoursDouble = hours.toDoubleOrNull()
                             if (hoursDouble != null) {
-                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -817,7 +817,7 @@ fun TruckEmissions(){
                         onClick = {
                             val hoursDouble = hours.toDoubleOrNull()
                             if (hoursDouble != null) {
-                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -944,7 +944,7 @@ fun TrainEmissions(){
                         onClick = {
                             val hoursDouble = hours.toDoubleOrNull()
                             if (hoursDouble != null) {
-                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -1071,7 +1071,7 @@ fun BusEmissions(){
                         onClick = {
                             val hoursDouble = hours.toDoubleOrNull()
                             if (hoursDouble != null) {
-                                saveToDatabase(context, emissionFactor, emissionValue, type, hoursDouble)
+                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -1164,7 +1164,7 @@ fun EmissionsTransportMenu(){
                             .background(beige, shape = CircleShape)
                             .clickable {
                                 selectedScreen =
-                                    getComposableScreen(value) { selectedemissionFactor ->
+                                    getTransportScreen(value) { selectedemissionFactor ->
                                         emissionFactor = selectedemissionFactor.toInt()
                                     }
                             },
@@ -1229,7 +1229,7 @@ fun EmissionsTransportMenu(){
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun saveToDatabase(context: Context, emissionFactor: Double,emissionValue: Double, type: String, hours: Double) {
+fun saveToTransportEmissions(context: Context, emissionFactor: Double,emissionValue: Double, type: String, hours: Double) {
     val dbHandler = DBHandler(context)
     val currentDate = LocalDate.now().toString()
 
@@ -1242,7 +1242,7 @@ fun saveToDatabase(context: Context, emissionFactor: Double,emissionValue: Doubl
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getComposableScreen(emissionFactor: Int, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
+fun getTransportScreen(emissionFactor: Int, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
     return when (emissionFactor) {
         1 -> { { CarEmissions(onValueSelected) } }
         2 -> { { MotorcycleEmissions(onValueSelected) } }

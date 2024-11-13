@@ -74,6 +74,22 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         onCreate(db)
     }
 
+    fun getSumOfEmissionsByType(type: String): Double {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT SUM(emissionFactor) FROM emissions WHERE type = ?",
+            arrayOf(type)
+        )
+        var sum = 0.0
+        if (cursor.moveToFirst()) {
+            sum = cursor.getDouble(0)
+        }
+        cursor.close()
+        db.close()
+        return sum
+    }
+
+
     companion object {
         private const val DB_NAME = "Eco-Life"
         private const val DB_VERSION = 1
