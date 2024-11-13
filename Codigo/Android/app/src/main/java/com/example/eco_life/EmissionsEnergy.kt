@@ -779,7 +779,7 @@ fun EmissionsEnergyMenu(){
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "Tipo de Transporte",
+                    text = "Consumo Eléctrico",
                     fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.Bold,
                     fontSize = textSize * 2,

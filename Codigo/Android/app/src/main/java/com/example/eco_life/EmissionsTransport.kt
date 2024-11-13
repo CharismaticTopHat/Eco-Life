@@ -59,17 +59,17 @@ class EmissionsTransportActivity : ComponentActivity() {
 @Composable
 fun LandTransportEmissions(onValueSelected: (Double) -> Unit) {
     val context = LocalContext.current
-    val beige = Color(230,230,230)
+    val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
+    val green = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Transport"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
-
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Row(
         modifier = Modifier
@@ -82,9 +82,33 @@ fun LandTransportEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Auto (Gasolina)", onClick = { emissionFactor = 2.3; emissionValue = 0.12 })
-        ButtonEnergyEmissions("Auto (Diésel)", onClick = { emissionFactor = 2.7; emissionValue = 0.1 })
-        ButtonEnergyEmissions("Auto (Híbrido)", onClick = { emissionFactor = 0.8; emissionValue = 0.04 })
+        ButtonEnergyEmissions(
+            text = "Auto (Gasolina)",
+            onClick = {
+                selectedButton = 0
+                emissionFactor = 2.3
+                emissionValue = 0.12
+            },
+            customColor = if (selectedButton == 0) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Auto (Diésel)",
+            onClick = {
+                selectedButton = 1
+                emissionFactor = 2.7
+                emissionValue = 0.1
+            },
+            customColor = if (selectedButton == 1) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Auto (Híbrido)",
+            onClick = {
+                selectedButton = 2
+                emissionFactor = 0.8
+                emissionValue = 0.04
+            },
+            customColor = if (selectedButton == 2) green else beige
+        )
     }
 
     Row(
@@ -98,9 +122,33 @@ fun LandTransportEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Motocicleta", onClick = { emissionFactor = 1.7; emissionValue = 0.05 })
-        ButtonEnergyEmissions("Bicicleta (Eléctrica)", onClick = { emissionFactor = 0.05; emissionValue = 0.01 })
-        ButtonEnergyEmissions("Scooter (Eléctrico)", onClick = { emissionFactor = 0.02; emissionValue = 0.005 })
+        ButtonEnergyEmissions(
+            text = "Motocicleta",
+            onClick = {
+                selectedButton = 3
+                emissionFactor = 1.7
+                emissionValue = 0.05
+            },
+            customColor = if (selectedButton == 3) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Bicicleta (Eléctrica)",
+            onClick = {
+                selectedButton = 4
+                emissionFactor = 0.05
+                emissionValue = 0.01
+            },
+            customColor = if (selectedButton == 4) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Scooter (Eléctrico)",
+            onClick = {
+                selectedButton = 5
+                emissionFactor = 0.02
+                emissionValue = 0.005
+            },
+            customColor = if (selectedButton == 5) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -113,9 +161,33 @@ fun LandTransportEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Camioneta", onClick = { emissionFactor = 2.5; emissionValue = 0.15 })
-        ButtonEnergyEmissions("Camión de Transporte", onClick = { emissionFactor = 1.2; emissionValue = 0.2 })
-        ButtonEnergyEmissions("Metro", onClick = { emissionFactor = 0.1; emissionValue = 0.03 })
+        ButtonEnergyEmissions(
+            text = "Camioneta",
+            onClick = {
+                selectedButton = 6
+                emissionFactor = 2.5
+                emissionValue = 0.15
+            },
+            customColor = if (selectedButton == 6) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Camión de Transporte",
+            onClick = {
+                selectedButton = 7
+                emissionFactor = 1.2
+                emissionValue = 0.2
+            },
+            customColor = if (selectedButton == 7) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Metro",
+            onClick = {
+                selectedButton = 8
+                emissionFactor = 0.1
+                emissionValue = 0.03
+            },
+            customColor = if (selectedButton == 8) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -233,17 +305,17 @@ fun LandTransportEmissions(onValueSelected: (Double) -> Unit) {
 @Composable
 fun AirTransportEmissions(onValueSelected: (Double) -> Unit) {
     val context = LocalContext.current
-    val beige = Color(230,230,230)
+    val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
+    val green = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Transport"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
-
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Row(
         modifier = Modifier
@@ -256,9 +328,33 @@ fun AirTransportEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Avión (Comercial)", onClick = { emissionFactor = 0.25; emissionValue = 0.04 })
-        ButtonEnergyEmissions("Jet Privado", onClick = { emissionFactor = 0.8; emissionValue = 0.1 })
-        ButtonEnergyEmissions("Helicóptero", onClick = { emissionFactor = 1.5; emissionValue = 0.15 })
+        ButtonEnergyEmissions(
+            text = "Avión (Comercial)",
+            onClick = {
+                selectedButton = 0
+                emissionFactor = 0.25
+                emissionValue = 0.04
+            },
+            customColor = if (selectedButton == 0) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Jet Privado",
+            onClick = {
+                selectedButton = 1
+                emissionFactor = 0.8
+                emissionValue = 0.1
+            },
+            customColor = if (selectedButton == 1) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Helicóptero",
+            onClick = {
+                selectedButton = 2
+                emissionFactor = 1.5
+                emissionValue = 0.15
+            },
+            customColor = if (selectedButton == 2) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -375,17 +471,17 @@ fun AirTransportEmissions(onValueSelected: (Double) -> Unit) {
 @Composable
 fun WaterTransportEmissions(onValueSelected: (Double) -> Unit) {
     val context = LocalContext.current
-    val beige = Color(230,230,230)
+    val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
+    val green = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Transport"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
-
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Row(
         modifier = Modifier
@@ -398,9 +494,33 @@ fun WaterTransportEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Barco de Pasajeros", onClick = { emissionFactor = 4.5; emissionValue = 0.5 })
-        ButtonEnergyEmissions("Yate", onClick = { emissionFactor = 3.0; emissionValue = 0.4 })
-        ButtonEnergyEmissions("Ferri", onClick = { emissionFactor = 2.5; emissionValue = 0.3 })
+        ButtonEnergyEmissions(
+            text = "Barco de Pasajeros",
+            onClick = {
+                selectedButton = 0
+                emissionFactor = 4.5
+                emissionValue = 0.5
+            },
+            customColor = if (selectedButton == 0) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Yate",
+            onClick = {
+                selectedButton = 1
+                emissionFactor = 3.0
+                emissionValue = 0.4
+            },
+            customColor = if (selectedButton == 1) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Ferri",
+            onClick = {
+                selectedButton = 2
+                emissionFactor = 2.5
+                emissionValue = 0.3
+            },
+            customColor = if (selectedButton == 2) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -413,8 +533,24 @@ fun WaterTransportEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Buque de carga", onClick = { emissionFactor = 5.0; emissionValue = 0.8 })
-        ButtonEnergyEmissions("Canoa (Eléctrica)", onClick = { emissionFactor = 0.05; emissionValue = 0.01 })
+        ButtonEnergyEmissions(
+            text = "Buque de carga",
+            onClick = {
+                selectedButton = 3
+                emissionFactor = 5.0
+                emissionValue = 0.8
+            },
+            customColor = if (selectedButton == 3) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Canoa (Eléctrica)",
+            onClick = {
+                selectedButton = 4
+                emissionFactor = 0.05
+                emissionValue = 0.01
+            },
+            customColor = if (selectedButton == 4) green else beige
+        )
     }
     Row(
         modifier = Modifier
@@ -532,7 +668,8 @@ fun WaterTransportEmissions(onValueSelected: (Double) -> Unit) {
 @Composable
 fun OtherTransportEmissions(onValueSelected: (Double) -> Unit) {
     val context = LocalContext.current
-    val beige = Color(230,230,230)
+    val beige = Color(190, 190, 190)
+    val green = Color(30, 132, 73)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
     val customColor = Color(30, 132, 73 )
@@ -542,6 +679,7 @@ fun OtherTransportEmissions(onValueSelected: (Double) -> Unit) {
     val type = "Transport"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Row(
         modifier = Modifier
@@ -554,8 +692,20 @@ fun OtherTransportEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions("Patineta Eléctrica", onClick = { emissionFactor = 0.03; emissionValue = 0.01 })
-        ButtonEnergyEmissions("Vehículo (Todo Terreno)", onClick = { emissionFactor = 3.0; emissionValue = 0.2 })
+        listOf(
+            "Patineta Eléctrica" to 0,
+            "Vehículo (Todo Terreno)" to 1
+        ).forEach { (label, index) ->
+            ButtonTransportEmissions(
+                text = label,
+                onClick = {
+                    selectedButton = index
+                    emissionFactor = if (index == 0) 0.03 else 3.0
+                    emissionValue = if (index == 0) 0.01 else 0.2
+                },
+                customColor = if (selectedButton == index) green else beige
+            )
+        }
     }
     Row(
         modifier = Modifier
@@ -670,394 +820,14 @@ fun OtherTransportEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TruckEmissions(){
-    val context = LocalContext.current
-    val beige = Color(230,230,230)
-    val headerGreen = Color(17,109,29)
-    val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
-    val buttonCornerRadius = 12.dp
-    val emissionFactor = 2.5
-    val emissionValue = 0.15
-    val type = "Transport"
-    var hours by remember { mutableStateOf("") }
-    var isInputValid by remember { mutableStateOf(true) }
+fun EmissionsTransportMenu() {
+    // Valores estéticos
+    val beige = Color(230, 230, 230)
+    val green = Color(30, 132, 73)
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                top = 24.dp,
-                start = 16.dp,
-                end = 20.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TextField(
-                value = hours,
-                onValueChange = { input ->
-                    hours = input
-                    isInputValid = input.toDoubleOrNull() != null
-                },
-                label = { Text("Ingrese las horas (Decimal): ") },
-                isError = !isInputValid,
-                modifier = Modifier.fillMaxWidth()
-            )
-            if (!isInputValid) {
-                Text(
-                    text = "Por favor, ingrese un valor con decimal.",
-                    color = Color.Red,
-                    fontSize = 12.sp
-                )
-            }
-        }
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                top = 24.dp,
-                start = 16.dp,
-                end = 20.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(
-            modifier = Modifier
-                .weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = 100.dp,
-                        start = 44.dp,
-                        end = 20.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Button(
-                        onClick = {
-                        },
-                        modifier = Modifier
-                            .height(80.dp)
-                            .clip(RoundedCornerShape(buttonCornerRadius))
-                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = beige,
-                            contentColor = headerGreen
-                        )
-                    ) {
-                        Text(
-                            text = "Cancelar",
-                            fontSize = textSize,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = Color.Black
-                        )
-                    }
-                }
-
-                Column {
-                    Button(
-                        onClick = {
-                            val hoursDouble = hours.toDoubleOrNull()
-                            if (hoursDouble != null) {
-                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
-                            }
-                        },
-                        modifier = Modifier
-                            .height(80.dp)
-                            .clip(RoundedCornerShape(buttonCornerRadius))
-                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Green,
-                            contentColor = headerGreen
-                        )
-                    ) {
-                        Text(
-                            text = "Continuar",
-                            fontSize = textSize,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = Color.White
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun TrainEmissions(){
-    val context = LocalContext.current
-    val beige = Color(230,230,230)
-    val headerGreen = Color(17,109,29)
-    val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
-    val buttonCornerRadius = 12.dp
-    val emissionFactor = 0.1
-    val emissionValue = 0.03
-    val type = "Transport"
-    var hours by remember { mutableStateOf("") }
-    var isInputValid by remember { mutableStateOf(true) }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                top = 24.dp,
-                start = 16.dp,
-                end = 20.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TextField(
-                value = hours,
-                onValueChange = { input ->
-                    hours = input
-                    isInputValid = input.toDoubleOrNull() != null
-                },
-                label = { Text("Ingrese las horas (Decimal): ") },
-                isError = !isInputValid,
-                modifier = Modifier.fillMaxWidth()
-            )
-            if (!isInputValid) {
-                Text(
-                    text = "Por favor, ingrese un valor con decimal.",
-                    color = Color.Red,
-                    fontSize = 12.sp
-                )
-            }
-        }
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                top = 24.dp,
-                start = 16.dp,
-                end = 20.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(
-            modifier = Modifier
-                .weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = 100.dp,
-                        start = 44.dp,
-                        end = 20.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Button(
-                        onClick = {
-                        },
-                        modifier = Modifier
-                            .height(80.dp)
-                            .clip(RoundedCornerShape(buttonCornerRadius))
-                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = beige,
-                            contentColor = headerGreen
-                        )
-                    ) {
-                        Text(
-                            text = "Cancelar",
-                            fontSize = textSize,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = Color.Black
-                        )
-                    }
-                }
-
-                Column {
-                    Button(
-                        onClick = {
-                            val hoursDouble = hours.toDoubleOrNull()
-                            if (hoursDouble != null) {
-                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
-                            }
-                        },
-                        modifier = Modifier
-                            .height(80.dp)
-                            .clip(RoundedCornerShape(buttonCornerRadius))
-                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Green,
-                            contentColor = headerGreen
-                        )
-                    ) {
-                        Text(
-                            text = "Continuar",
-                            fontSize = textSize,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = Color.White
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun BusEmissions(){
-    val context = LocalContext.current
-    val beige = Color(230,230,230)
-    val headerGreen = Color(17,109,29)
-    val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
-    val buttonCornerRadius = 12.dp
-    val emissionFactor = 0.1
-    val emissionValue = 0.04
-    val type = "Transport"
-    var hours by remember { mutableStateOf("") }
-    var isInputValid by remember { mutableStateOf(true) }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                top = 24.dp,
-                start = 16.dp,
-                end = 20.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TextField(
-                value = hours,
-                onValueChange = { input ->
-                    hours = input
-                    isInputValid = input.toDoubleOrNull() != null
-                },
-                label = { Text("Ingrese las horas (Decimal): ") },
-                isError = !isInputValid,
-                modifier = Modifier.fillMaxWidth()
-            )
-            if (!isInputValid) {
-                Text(
-                    text = "Por favor, ingrese un valor con decimal.",
-                    color = Color.Red,
-                    fontSize = 12.sp
-                )
-            }
-        }
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                top = 24.dp,
-                start = 16.dp,
-                end = 20.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(
-            modifier = Modifier
-                .weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = 100.dp,
-                        start = 44.dp,
-                        end = 20.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Button(
-                        onClick = {
-                        },
-                        modifier = Modifier
-                            .height(80.dp)
-                            .clip(RoundedCornerShape(buttonCornerRadius))
-                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = beige,
-                            contentColor = headerGreen
-                        )
-                    ) {
-                        Text(
-                            text = "Cancelar",
-                            fontSize = textSize,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = Color.Black
-                        )
-                    }
-                }
-
-                Column {
-                    Button(
-                        onClick = {
-                            val hoursDouble = hours.toDoubleOrNull()
-                            if (hoursDouble != null) {
-                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
-                            }
-                        },
-                        modifier = Modifier
-                            .height(80.dp)
-                            .clip(RoundedCornerShape(buttonCornerRadius))
-                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Green,
-                            contentColor = headerGreen
-                        )
-                    ) {
-                        Text(
-                            text = "Continuar",
-                            fontSize = textSize,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = Color.White
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun EmissionsTransportMenu(){
-    //Valores estéticos
-    val beige = Color(230,230,230)
-    val headerGreen = Color(17,109,29)
-    val textSize = 16.sp
     var emissionFactor by remember { mutableStateOf(0) }
     var selectedScreen by remember { mutableStateOf<@Composable () -> Unit>({}) }
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Column(
         modifier = Modifier
@@ -1067,7 +837,7 @@ fun EmissionsTransportMenu(){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp),
+                .padding(bottom = 8.dp)
         ) {
             Column(
                 modifier = Modifier.weight(1f),
@@ -1077,13 +847,10 @@ fun EmissionsTransportMenu(){
                     text = "Tipo de Transporte",
                     fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.Bold,
-                    fontSize = textSize * 2,
+                    fontSize = 32.sp,
                     color = Color.Green,
                     modifier = Modifier
-                        .padding(
-                            top = 16.dp,
-                            start = 16.dp
-                        )
+                        .padding(top = 16.dp, start = 16.dp)
                 )
             }
         }
@@ -1091,34 +858,33 @@ fun EmissionsTransportMenu(){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    top = 24.dp,
-                    start = 16.dp,
-                    end = 20.dp
-                ),
+                .padding(top = 24.dp, start = 16.dp, end = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             val images = listOf(
                 Pair(R.drawable.car, 1),
                 Pair(R.drawable.plane, 2),
                 Pair(R.drawable.boat, 3),
-                Pair(R.drawable.more, 4),
+                Pair(R.drawable.more, 4)
             )
 
             images.forEach { (imageRes, value) ->
                 Column(
-                    modifier = Modifier
-                        .weight(1f),
+                    modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box(
                         modifier = Modifier
                             .size(60.dp)
-                            .background(beige, shape = CircleShape)
+                            .background(
+                                color = if (selectedButton == value) green else beige,
+                                shape = CircleShape
+                            )
                             .clickable {
+                                selectedButton = value
                                 selectedScreen =
-                                    getTransportScreen(value) { selectedemissionFactor ->
-                                        emissionFactor = selectedemissionFactor.toInt()
+                                    getTransportScreen(value) { selectedEmissionFactor ->
+                                        emissionFactor = selectedEmissionFactor.toInt()
                                     }
                             },
                         contentAlignment = Alignment.Center
@@ -1126,13 +892,13 @@ fun EmissionsTransportMenu(){
                         Image(
                             painter = painterResource(id = imageRes),
                             contentDescription = "Transport $value",
-                            modifier = Modifier
-                                .size(30.dp)
+                            modifier = Modifier.size(30.dp)
                         )
                     }
                 }
             }
         }
+
         Box(modifier = Modifier.fillMaxWidth()) {
             selectedScreen()
         }
@@ -1170,9 +936,9 @@ fun ButtonTransportEmissions(
     buttonWidth: Dp = 110.dp,
     buttonHeight: Dp = 80.dp,
     maxFontSize: TextUnit = 11.sp,
-    customColor: Color = Color(30, 132, 73 ),
+    customColor: Color = Color(30, 132, 73),
     buttonCornerRadius: Dp = 12.dp,
-    headerGreen: Color = Color(17,109,29)
+    headerGreen: Color = Color(17, 109, 29)
 ) {
     Button(
         onClick = onClick,
