@@ -1,10 +1,7 @@
 package com.example.eco_life
 
-import android.content.Context
 import android.os.Build
-import androidx.compose.ui.graphics.vector.ImageVector
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -13,14 +10,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -31,41 +24,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eco_life.ui.theme.EcoLifeTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.*
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.runtime.LaunchedEffect
-import kotlinx.coroutines.delay
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntSize
-import com.example.ecoshops.data.DataSource
-import com.example.eco_life.VideogameMenu
-import kotlinx.coroutines.launch
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
-import com.example.eco_life.data.DBHandler
-import com.google.android.gms.maps.model.Circle
-import java.time.LocalDate
-import java.time.DayOfWeek
 
 class EmissionsEnergyActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -1102,19 +1075,6 @@ fun EmissionsEnergyMenu(){
             selectedScreen()
         }
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun saveToEnergyEmissions(context: Context, emissionFactor: Double, emissionValue: Double, type: String, hours: Double) {
-    val dbHandler = DBHandler(context)
-    val currentDate = LocalDate.now().toString()
-
-    dbHandler.addEmission(emissionFactor, emissionValue, currentDate, type, hours)
-    Toast.makeText(
-        context,
-        "Factor: $emissionFactor, Value: $emissionValue on $currentDate of type $type with $hours hours",
-        Toast.LENGTH_SHORT
-    ).show()
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

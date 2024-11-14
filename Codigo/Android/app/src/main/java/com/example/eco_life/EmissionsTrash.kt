@@ -63,16 +63,17 @@ class EmissionsTrashActivity : ComponentActivity() {
 @Composable
 fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
     val context = LocalContext.current
-    val beige = Color(230,230,230)
+    val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
+    val green = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Energy"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Row(
         modifier = Modifier
@@ -85,9 +86,33 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonTrashEmissions("Plásticos (Reciclables)", onClick = { emissionFactor = 0.3; emissionValue = 0.5 })
-        ButtonTrashEmissions("Latas de aluminio", onClick = { emissionFactor = 0.3; emissionValue = 0.2 })
-        ButtonTrashEmissions("Papel/Cartón", onClick = { emissionFactor = 0.2; emissionValue = 1.0 })
+        ButtonEnergyEmissions(
+            text = "Plásticos (Recicables)",
+            onClick = {
+                selectedButton = 0
+                emissionFactor = 0.3
+                emissionValue = 0.5
+            },
+            customColor = if (selectedButton == 0) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Latas (Aluminio)",
+            onClick = {
+                selectedButton = 1
+                emissionFactor = 0.3
+                emissionValue = 0.2
+            },
+            customColor = if (selectedButton == 1) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Papel/Cartón",
+            onClick = {
+                selectedButton = 2
+                emissionFactor = 0.2
+                emissionValue = 1.0
+            },
+            customColor = if (selectedButton == 2) green else beige
+        )
     }
 
     Row(
@@ -101,14 +126,30 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonTrashEmissions("Vidrio", onClick = { emissionFactor = 0.1; emissionValue = 1.2 })
-        ButtonTrashEmissions("Envases de alimentos", onClick = { emissionFactor = 0.3; emissionValue = 0.3 })
+        ButtonEnergyEmissions(
+            text = "Vidrio",
+            onClick = {
+                selectedButton = 3
+                emissionFactor = 0.1
+                emissionValue = 1.2
+            },
+            customColor = if (selectedButton == 3) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Envases de alimentos",
+            onClick = {
+                selectedButton = 4
+                emissionFactor = 0.3
+                emissionValue = 0.3
+            },
+            customColor = if (selectedButton == 4) green else beige
+        )
     }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 100.dp,
+                top = 30.dp,
                 start = 16.dp,
                 end = 20.dp
             ),
@@ -143,7 +184,7 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 100.dp,
+                top = 30.dp,
                 start = 16.dp,
                 end = 20.dp
             ),
@@ -220,16 +261,17 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
 @Composable
 fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
     val context = LocalContext.current
-    val beige = Color(230,230,230)
+    val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
+    val green = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
-    val type = "Energy"
+    val type = "Trash"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Row(
         modifier = Modifier
@@ -242,9 +284,24 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonTrashEmissions("Desechos generales", onClick = { emissionFactor = 0.5; emissionValue = 2.0 })
-        ButtonTrashEmissions("Restos de comida", onClick = { emissionFactor = 0.5; emissionValue = 1.5 })
-        ButtonTrashEmissions("Desechos de jardinería", onClick = { emissionFactor = 0.4; emissionValue = 3.0 })
+        ButtonEnergyEmissions(
+            text = "Desechos Generales",
+            onClick = {
+                selectedButton = 0
+                emissionFactor = 0.2
+                emissionValue = 60.0
+            },
+            customColor = if (selectedButton == 0) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Desechos de jardunería",
+            onClick = {
+                selectedButton = 1
+                emissionFactor = 0.23
+                emissionValue = 70.0
+            },
+            customColor = if (selectedButton == 1) green else beige
+        )
     }
 
     Row(
@@ -258,14 +315,30 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonTrashEmissions("Comida", onClick = { emissionFactor = 0.5; emissionValue = 1.5 })
-        ButtonTrashEmissions("Frutas & Vegetales", onClick = { emissionFactor = 0.5; emissionValue = 2.0 })
+        ButtonEnergyEmissions(
+            text = "Restos de comida",
+            onClick = {
+                selectedButton = 2
+                emissionFactor = 0.5
+                emissionValue = 1.5
+            },
+            customColor = if (selectedButton == 2) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Frutas/Vegetales",
+            onClick = {
+                selectedButton = 3
+                emissionFactor = 0.5
+                emissionValue = 2.0
+            },
+            customColor = if (selectedButton == 3) green else beige
+        )
     }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 100.dp,
+                top = 20.dp,
                 start = 16.dp,
                 end = 20.dp
             ),
@@ -300,7 +373,7 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 100.dp,
+                top = 20.dp,
                 start = 16.dp,
                 end = 20.dp
             ),
@@ -377,16 +450,17 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
 @Composable
 fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
     val context = LocalContext.current
-    val beige = Color(230,230,230)
+    val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
+    val green = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
-    val type = "Energy"
+    val type = "Trash"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Row(
         modifier = Modifier
@@ -399,45 +473,148 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonTrashEmissions("Electrónicos (Pequeños)", onClick = { emissionFactor = 1.5; emissionValue = 0.4 })
-        ButtonTrashEmissions("Electrónicos (Grandes)", onClick = { emissionFactor = 2.0; emissionValue = 10.0 })
-        ButtonTrashEmissions("Pilas", onClick = { emissionFactor = 2.5; emissionValue = 0.05 })
+        ButtonEnergyEmissions(
+            text = "Electrodomesticos (Pequeños)",
+            onClick = {
+                selectedButton = 0
+                emissionFactor = 1.5
+                emissionValue = 0.4
+            },
+            customColor = if (selectedButton == 0) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Electrodomésticos (Grandes)",
+            onClick = {
+                selectedButton = 1
+                emissionFactor = 2.0
+                emissionValue = 10.0
+            },
+            customColor = if (selectedButton == 1) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Pilas",
+            onClick = {
+                selectedButton = 2
+                emissionFactor = 2.5
+                emissionValue = 0.05
+            },
+            customColor = if (selectedButton == 2) green else beige
+        )
     }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 24.dp,
+                top = 100.dp,
                 start = 16.dp,
                 end = 20.dp
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonTrashEmissions("Electrónicos (Pequeños)", onClick = { emissionFactor = 1.5; emissionValue = 0.4 })
-        ButtonTrashEmissions("Electrónicos (Grandes)", onClick = { emissionFactor = 2.0; emissionValue = 10.0 })
-        ButtonTrashEmissions("Pilas", onClick = { emissionFactor = 2.5; emissionValue = 0.05 })
+        ButtonEnergyEmissions(
+            text = "Neumáticos",
+            onClick = {
+                selectedButton = 3
+                emissionFactor = 1.1
+                emissionValue = 3.0
+            },
+            customColor = if (selectedButton == 3) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Pintura",
+            onClick = {
+                selectedButton = 4
+                emissionFactor = 1.0
+                emissionValue = 0.5
+            },
+            customColor = if (selectedButton == 4) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Muebles",
+            onClick = {
+                selectedButton = 5
+                emissionFactor = 0.9
+                emissionValue = 20.0
+            },
+            customColor = if (selectedButton == 5) green else beige
+        )
     }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 100.dp,
+                top = 180.dp,
                 start = 16.dp,
                 end = 20.dp
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonTrashEmissions("Comida", onClick = { emissionFactor = 0.5; emissionValue = 1.5 })
-        ButtonTrashEmissions("Frutas & Vegetales", onClick = { emissionFactor = 0.5; emissionValue = 2.0 })
+        ButtonEnergyEmissions(
+            text = "Desechos de construcción",
+            onClick = {
+                selectedButton = 6
+                emissionFactor = 0.7
+                emissionValue = 15.0
+            },
+            customColor = if (selectedButton == 6) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Plásticos (No reciclables)",
+            onClick = {
+                selectedButton = 7
+                emissionFactor = 0.7
+                emissionValue = 0.4
+            },
+            customColor = if (selectedButton == 7) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Capsulas de café",
+            onClick = {
+                selectedButton = 8
+                emissionFactor = 2.5
+                emissionValue = 0.05
+            },
+            customColor = if (selectedButton == 8) green else beige
+        )
     }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 100.dp,
+                top = 260.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        ButtonEnergyEmissions(
+            text = "Papel",
+            onClick = {
+                selectedButton = 9
+                emissionFactor = 0.2
+                emissionValue = 0.5
+            },
+            customColor = if (selectedButton == 9) green else beige
+        )
+        ButtonEnergyEmissions(
+            text = "Ropa",
+            onClick = {
+                selectedButton = 10
+                emissionFactor = 0.6
+                emissionValue = 1.0
+            },
+            customColor = if (selectedButton == 10) green else beige
+        )
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 180.dp,
                 start = 16.dp,
                 end = 20.dp
             ),
@@ -472,7 +649,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 100.dp,
+                top = 180.dp,
                 start = 16.dp,
                 end = 20.dp
             ),
