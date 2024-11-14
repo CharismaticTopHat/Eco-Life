@@ -3,6 +3,7 @@ package com.example.eco_life
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -50,6 +51,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.eco_life.data.DBHandler
 import com.example.eco_life.ui.theme.EcoLifeTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class CalculatorActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
@@ -92,7 +95,21 @@ fun CalculatorMenu(navController: NavController) {
     val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     val headerGreen = Color(17,109,29)
+    var totalEmissions by remember { mutableStateOf(0.0) }
+    val context = LocalContext.current
 
+    LaunchedEffect(Unit) {
+        val emissions = withContext(Dispatchers.IO) {
+            try {
+                getTotalEmissionsForTransport(context)
+            } catch (e: Exception) {
+                Log.e("CalculatorMenu", "Error fetching emissions: ${e.message}")
+                Log.d("CalculatorMenu", "Getting Transport Coal Print")
+                0.0 // Valor en caso de error
+            }
+        }
+        totalEmissions = emissions
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -237,7 +254,7 @@ fun CalculatorMenu(navController: NavController) {
                 horizontalArrangement = Arrangement.Center
             ){
                 Text(
-                    text = "2.3 Toneladas de CO2",
+                    text = "${"%.2f".format(totalEmissions)} Kilos de CO2",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -653,6 +670,12 @@ fun CalculatorMenu(navController: NavController) {
             }
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getTotalEmissionsForTransport(context: Context): Double {
+    val dbHandler = DBHandler(context)
+    return dbHandler.getSumOfEmissionsByType("Transport")
 }
 
 @Composable

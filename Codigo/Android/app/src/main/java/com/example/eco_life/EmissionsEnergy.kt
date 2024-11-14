@@ -992,10 +992,11 @@ fun RefrigerationEmissions(onValueSelected: (Double) -> Unit) {
 fun EmissionsEnergyMenu(){
     //Valores estéticos
     val beige = Color(230,230,230)
-    val headerGreen = Color(17,109,29)
+    val green = Color(17,109,29)
     val textSize = 16.sp
     var emissionFactor by remember { mutableStateOf(0) }
     var selectedScreen by remember { mutableStateOf<@Composable () -> Unit>({}) }
+    var selectedButton by remember { mutableStateOf<Int?>(null) }
 
     Column(
         modifier = Modifier
@@ -1045,18 +1046,21 @@ fun EmissionsEnergyMenu(){
 
             images.forEach { (imageRes, value) ->
                 Column(
-                    modifier = Modifier
-                        .weight(1f),
+                    modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box(
                         modifier = Modifier
                             .size(60.dp)
-                            .background(beige, shape = CircleShape)
+                            .background(
+                                color = if (selectedButton == value) green else beige,
+                                shape = CircleShape
+                            )
                             .clickable {
+                                selectedButton = value
                                 selectedScreen =
-                                    getEnergyScreen(value) { selectedemissionFactor ->
-                                        emissionFactor = selectedemissionFactor.toInt()
+                                    getEnergyScreen(value) { selectedEmissionFactor ->
+                                        emissionFactor = selectedEmissionFactor.toInt()
                                     }
                             },
                         contentAlignment = Alignment.Center
@@ -1064,8 +1068,7 @@ fun EmissionsEnergyMenu(){
                         Image(
                             painter = painterResource(id = imageRes),
                             contentDescription = "Transport $value",
-                            modifier = Modifier
-                                .size(30.dp)
+                            modifier = Modifier.size(30.dp)
                         )
                     }
                 }

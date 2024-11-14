@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import com.example.eco_life.EmissionModel
 
 class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
@@ -95,7 +96,7 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         private const val DB_VERSION = 1
         private const val TABLE_NAME = "emissions"
         private const val ID_COL = "id"
-        private const val EMISSION_FACTOR_COL = "factor"
+        private const val EMISSION_FACTOR_COL = "emissionFactor"
         private const val EMISSION_VALUE_COL = "emissionValue"
         private const val DATE_COL = "date"
         private const val TYPE_COL = "type"
