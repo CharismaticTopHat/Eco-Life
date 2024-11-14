@@ -280,7 +280,6 @@ fun StartMenu() {
     val textHeight = textSize.value.dp
     val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
-
     //Variables de Funcionamiento
     var currentChallengeId by remember { mutableStateOf(R.string.challenge0) }
     val challengeIds = listOf(
@@ -299,7 +298,29 @@ fun StartMenu() {
     var dayStatus by remember { mutableStateOf(Array(7) { "waiting" }) }
     val currentDate = LocalDate.now()
     val currentDayOfWeek = currentDate.dayOfWeek.value
+    var currentStreak by remember { mutableStateOf(0) }
+    var highestStreak by remember { mutableStateOf(0) }
+    var lastCompletedDay by remember { mutableStateOf<LocalDate?>(null) }
 
+    LaunchedEffect(currentDate) {
+        val previousDayStatus = dayStatus[currentDayOfWeek - 1]
+
+        if (previousDayStatus == "completed") {
+            if (lastCompletedDay != currentDate.minusDays(1)) {
+                currentStreak = 1
+            } else {
+                currentStreak += 1
+            }
+
+            if (currentStreak > highestStreak) {
+                highestStreak = currentStreak
+            }
+
+            lastCompletedDay = currentDate
+        } else if (previousDayStatus == "waiting" || lastCompletedDay != currentDate.minusDays(1)) {
+            currentStreak = 0
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -592,7 +613,7 @@ fun StartMenu() {
         ) {
             Column {
                 Text(
-                    text = "Tu emisión estadística actual es: ",
+                    text = "Tú racha actual: ",
                     fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.Bold,
                     fontSize = textSize/1.25,
@@ -603,7 +624,7 @@ fun StartMenu() {
             }
             Column {
                 Text(
-                    text = "5.6 toneladas de carbono. ",
+                    text = "$currentStreak días ",
                     fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.Bold,
                     fontSize = textSize/1.5,
@@ -631,7 +652,7 @@ fun StartMenu() {
         ) {
             Column {
                 Text(
-                    text = "Actualmente emites más con: ",
+                    text = "Tu racha más alta: ",
                     fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.Bold,
                     fontSize = textSize/1.25,
@@ -642,7 +663,7 @@ fun StartMenu() {
             }
             Column {
                 Text(
-                    text = "Transporte y desechos. ",
+                    text = "$highestStreak días ",
                     fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.Bold,
                     fontSize = textSize/1.5,
