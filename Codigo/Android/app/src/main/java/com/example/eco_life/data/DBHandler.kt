@@ -75,10 +75,10 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         onCreate(db)
     }
 
-    fun getSumOfEmissionsByType(type: String): Double {
+    fun getEmissionsByType(type: String): Double {
         val db = this.readableDatabase
         val cursor = db.rawQuery(
-            "SELECT SUM(emissionFactor) FROM emissions WHERE type = ?",
+            "SELECT SUM(emissionFactor * emissionValue * hours)  FROM emissions WHERE type = ?",
             arrayOf(type)
         )
         var sum = 0.0

@@ -95,20 +95,17 @@ fun CalculatorMenu(navController: NavController) {
     val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     val headerGreen = Color(17,109,29)
-    var totalEmissions by remember { mutableStateOf(0.0) }
+    var transportEmissions by remember { mutableStateOf(0.0) }
+    var energyEmissions by remember { mutableStateOf(0.0) }
+    var foodEmissions by remember { mutableStateOf(0.0) }
+    var trashEmissions by remember { mutableStateOf(0.0) }
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        val emissions = withContext(Dispatchers.IO) {
-            try {
-                getTotalEmissionsForTransport(context)
-            } catch (e: Exception) {
-                Log.e("CalculatorMenu", "Error fetching emissions: ${e.message}")
-                Log.d("CalculatorMenu", "Getting Transport Coal Print")
-                0.0 // Valor en caso de error
-            }
-        }
-        totalEmissions = emissions
+        transportEmissions = getTotalEmissionsForTransport(context)
+        energyEmissions = getTotalEmissionsForEnergy(context)
+        foodEmissions = getTotalEmissionsForFood(context)
+        trashEmissions = getTotalEmissionsForTrash(context)
     }
     Column(
         modifier = Modifier
@@ -254,7 +251,7 @@ fun CalculatorMenu(navController: NavController) {
                 horizontalArrangement = Arrangement.Center
             ){
                 Text(
-                    text = "${"%.2f".format(totalEmissions)} Kilos de CO2",
+                    text = "${"%.2f".format(transportEmissions)} Kilos de CO2",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -380,7 +377,7 @@ fun CalculatorMenu(navController: NavController) {
                 horizontalArrangement = Arrangement.Center
             ){
                 Text(
-                    text = "2.3 Toneladas de CO2",
+                    text = "${"%.2f".format(energyEmissions)} Kilos de CO2",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -504,7 +501,7 @@ fun CalculatorMenu(navController: NavController) {
                 horizontalArrangement = Arrangement.Center
             ){
                 Text(
-                    text = "2.3 Toneladas de CO2",
+                    text = "${"%.2f".format(foodEmissions)} Kilos de CO2",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -628,7 +625,7 @@ fun CalculatorMenu(navController: NavController) {
                 horizontalArrangement = Arrangement.Center
             ){
                 Text(
-                    text = "2.3 Toneladas de CO2",
+                    text = "${"%.2f".format(trashEmissions)} Kilos de CO2",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -675,8 +672,27 @@ fun CalculatorMenu(navController: NavController) {
 @RequiresApi(Build.VERSION_CODES.O)
 fun getTotalEmissionsForTransport(context: Context): Double {
     val dbHandler = DBHandler(context)
-    return dbHandler.getSumOfEmissionsByType("Transport")
+    return dbHandler.getEmissionsByType("Transport")
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getTotalEmissionsForEnergy(context: Context): Double {
+    val dbHandler = DBHandler(context)
+    return dbHandler.getEmissionsByType("Energy")
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getTotalEmissionsForFood(context: Context): Double {
+    val dbHandler = DBHandler(context)
+    return dbHandler.getEmissionsByType("Food")
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getTotalEmissionsForTrash(context: Context): Double {
+    val dbHandler = DBHandler(context)
+    return dbHandler.getEmissionsByType("Trash")
+}
+
 
 @Composable
 fun CalculatorPreview() {
