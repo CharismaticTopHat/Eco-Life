@@ -40,6 +40,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.eco_life.data.DBHandler
 import java.time.LocalDate
 
@@ -49,15 +53,31 @@ class EmissionsTransportActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EcoLifeTheme {
-                EmissionsTransportMenu()
+                NavigationTransportEmissions()
             }
+        }
+    }
+}
+
+@Composable
+fun NavigationTransportEmissions() {
+    val navController = rememberNavController()
+    Scaffold(
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = "emissions_transport",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable("calculator_menu") { CalculatorMenu(navController = navController) }
+            composable("emissions_transport") { EmissionsTransportMenu(navController = navController) }
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LandTransportEmissions(onValueSelected: (Double) -> Unit) {
+fun LandTransportEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
@@ -252,6 +272,7 @@ fun LandTransportEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -303,7 +324,7 @@ fun LandTransportEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AirTransportEmissions(onValueSelected: (Double) -> Unit) {
+fun AirTransportEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
@@ -418,6 +439,7 @@ fun AirTransportEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -469,7 +491,7 @@ fun AirTransportEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun WaterTransportEmissions(onValueSelected: (Double) -> Unit) {
+fun WaterTransportEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
@@ -615,6 +637,7 @@ fun WaterTransportEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -666,7 +689,7 @@ fun WaterTransportEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun OtherTransportEmissions(onValueSelected: (Double) -> Unit) {
+fun OtherTransportEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190, 190, 190)
     val green = Color(30, 132, 73)
@@ -769,6 +792,7 @@ fun OtherTransportEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -820,7 +844,7 @@ fun OtherTransportEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EmissionsTransportMenu() {
+fun EmissionsTransportMenu(navController: NavController) {
     // Valores estéticos
     val beige = Color(230, 230, 230)
     val green = Color(30, 132, 73)
@@ -883,7 +907,7 @@ fun EmissionsTransportMenu() {
                             .clickable {
                                 selectedButton = value
                                 selectedScreen =
-                                    getTransportScreen(value) { selectedEmissionFactor ->
+                                    getTransportScreen(value, navController) { selectedEmissionFactor ->
                                         emissionFactor = selectedEmissionFactor.toInt()
                                     }
                             },
@@ -913,18 +937,18 @@ fun saveToTransportEmissions(context: Context, emissionFactor: Double,emissionVa
     dbHandler.addEmission(emissionFactor, emissionValue, currentDate, type, hours)
     Toast.makeText(
         context,
-        "Factor: $emissionFactor, Value: $emissionValue on $currentDate of type $type with $hours hours",
+        "El impacto del transporte ha sido registrado",
         Toast.LENGTH_SHORT
     ).show()
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getTransportScreen(emissionFactor: Int, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
+fun getTransportScreen(emissionFactor: Int, navController: NavController, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
     return when (emissionFactor) {
-        1 -> { { LandTransportEmissions(onValueSelected) } }
-        2 -> { { AirTransportEmissions(onValueSelected) } }
-        3 -> { { WaterTransportEmissions(onValueSelected) } }
-        4 -> { { OtherTransportEmissions(onValueSelected) } }
+        1 -> { { LandTransportEmissions(onValueSelected, navController) } }
+        2 -> { { AirTransportEmissions(onValueSelected, navController) } }
+        3 -> { { WaterTransportEmissions(onValueSelected, navController) } }
+        4 -> { { OtherTransportEmissions(onValueSelected, navController) } }
         else -> { {} }
     }
 }
@@ -971,6 +995,6 @@ fun ButtonTransportEmissions(
 @Composable
 fun EmissionsTransportPreview() {
     EcoLifeTheme {
-        EmissionsTransportMenu()
+        NavigationTransportEmissions()
     }
 }

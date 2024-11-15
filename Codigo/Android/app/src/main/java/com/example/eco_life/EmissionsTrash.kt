@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.filled.*
@@ -42,6 +43,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.eco_life.data.DBHandler
 import com.example.eco_life.ui.theme.EcoLifeTheme
 import java.time.LocalDate
@@ -53,15 +58,31 @@ class EmissionsTrashActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EcoLifeTheme {
-                EmissionsTrashMenu()
+                NavigationTrashEmissions()
             }
+        }
+    }
+}
+
+@Composable
+fun NavigationTrashEmissions() {
+    val navController = rememberNavController()
+    Scaffold(
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = "emissions_trash",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable("calculator_menu") { CalculatorMenu(navController = navController) }
+            composable("emissions_trash") { EmissionsTrashMenu(navController = navController) }
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
+fun RecycleEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
@@ -86,7 +107,7 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Plásticos (Recicables)",
             onClick = {
                 selectedButton = 0
@@ -95,7 +116,7 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
             },
             customColor = if (selectedButton == 0) green else beige
         )
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Latas (Aluminio)",
             onClick = {
                 selectedButton = 1
@@ -104,7 +125,7 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
             },
             customColor = if (selectedButton == 1) green else beige
         )
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Papel/Cartón",
             onClick = {
                 selectedButton = 2
@@ -126,7 +147,7 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Vidrio",
             onClick = {
                 selectedButton = 3
@@ -135,7 +156,7 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
             },
             customColor = if (selectedButton == 3) green else beige
         )
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Envases de alimentos",
             onClick = {
                 selectedButton = 4
@@ -167,7 +188,7 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
                     hours = input
                     isInputValid = input.toDoubleOrNull() != null
                 },
-                label = { Text("Ingrese las horas (Decimal): ") },
+                label = { Text("Ingrese el peso en kilos (Decimal): ") },
                 isError = !isInputValid,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -208,6 +229,7 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -259,7 +281,7 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
+fun OrganicEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
@@ -284,7 +306,7 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Desechos Generales",
             onClick = {
                 selectedButton = 0
@@ -293,7 +315,7 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
             },
             customColor = if (selectedButton == 0) green else beige
         )
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Desechos de jardunería",
             onClick = {
                 selectedButton = 1
@@ -315,7 +337,7 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Restos de comida",
             onClick = {
                 selectedButton = 2
@@ -324,7 +346,7 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
             },
             customColor = if (selectedButton == 2) green else beige
         )
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Frutas/Vegetales",
             onClick = {
                 selectedButton = 3
@@ -356,7 +378,7 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
                     hours = input
                     isInputValid = input.toDoubleOrNull() != null
                 },
-                label = { Text("Ingrese las horas (Decimal): ") },
+                label = { Text("Ingrese el peso en kilos (Decimal): ") },
                 isError = !isInputValid,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -397,6 +419,7 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -448,7 +471,7 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
+fun InorganicEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
@@ -473,7 +496,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Electrodomesticos (Pequeños)",
             onClick = {
                 selectedButton = 0
@@ -482,7 +505,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
             },
             customColor = if (selectedButton == 0) green else beige
         )
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Electrodomésticos (Grandes)",
             onClick = {
                 selectedButton = 1
@@ -491,7 +514,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
             },
             customColor = if (selectedButton == 1) green else beige
         )
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Pilas",
             onClick = {
                 selectedButton = 2
@@ -512,7 +535,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Neumáticos",
             onClick = {
                 selectedButton = 3
@@ -521,7 +544,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
             },
             customColor = if (selectedButton == 3) green else beige
         )
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Pintura",
             onClick = {
                 selectedButton = 4
@@ -530,7 +553,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
             },
             customColor = if (selectedButton == 4) green else beige
         )
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Muebles",
             onClick = {
                 selectedButton = 5
@@ -552,7 +575,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Desechos de construcción",
             onClick = {
                 selectedButton = 6
@@ -561,7 +584,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
             },
             customColor = if (selectedButton == 6) green else beige
         )
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Plásticos (No reciclables)",
             onClick = {
                 selectedButton = 7
@@ -570,7 +593,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
             },
             customColor = if (selectedButton == 7) green else beige
         )
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Capsulas de café",
             onClick = {
                 selectedButton = 8
@@ -591,7 +614,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Papel",
             onClick = {
                 selectedButton = 9
@@ -600,7 +623,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
             },
             customColor = if (selectedButton == 9) green else beige
         )
-        ButtonEnergyEmissions(
+        ButtonTrashEmissions(
             text = "Ropa",
             onClick = {
                 selectedButton = 10
@@ -632,7 +655,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
                     hours = input
                     isInputValid = input.toDoubleOrNull() != null
                 },
-                label = { Text("Ingrese las horas (Decimal): ") },
+                label = { Text("Ingrese el peso en kilos (Decimal): ") },
                 isError = !isInputValid,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -673,6 +696,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -724,7 +748,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EmissionsTrashMenu(){
+fun EmissionsTrashMenu(navController: NavController){
     //Valores estéticos
     val beige = Color(230,230,230)
     val green = Color(17,109,29)
@@ -792,7 +816,7 @@ fun EmissionsTrashMenu(){
                             .clickable {
                                 selectedButton = value
                                 selectedScreen =
-                                    getTrashScreen(value) { selectedEmissionFactor ->
+                                    getTrashScreen(value, navController) { selectedEmissionFactor ->
                                         emissionFactor = selectedEmissionFactor.toInt()
                                     }
                             },
@@ -821,17 +845,17 @@ fun saveToTrashEmissions(context: Context, emissionFactor: Double, emissionValue
     dbHandler.addEmission(emissionFactor, emissionValue, currentDate, type, hours)
     Toast.makeText(
         context,
-        "Factor: $emissionFactor, Value: $emissionValue on $currentDate of type $type with $hours hours",
+        "El impacto de los residuos desechados han sido registrados",
         Toast.LENGTH_SHORT
     ).show()
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getTrashScreen(emissionFactor: Int, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
+fun getTrashScreen(emissionFactor: Int, navController: NavController, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
     return when (emissionFactor) {
-        1 -> { { RecycleEmissions(onValueSelected) } }
-        2 -> { { OrganicEmissions(onValueSelected) } }
-        3 -> { { InorganicEmissions(onValueSelected) } }
+        1 -> { { RecycleEmissions(onValueSelected, navController) } }
+        2 -> { { OrganicEmissions(onValueSelected, navController) } }
+        3 -> { { InorganicEmissions(onValueSelected, navController) } }
         else -> { {} }
     }
 }
@@ -878,6 +902,6 @@ fun ButtonTrashEmissions(
 @Composable
 fun EmissionsTrashPreview() {
     EcoLifeTheme {
-        EmissionsTrashMenu()
+        NavigationTrashEmissions()
     }
 }

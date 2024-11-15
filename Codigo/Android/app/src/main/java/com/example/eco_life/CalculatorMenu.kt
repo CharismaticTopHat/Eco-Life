@@ -78,10 +78,10 @@ fun NavigationCalculator() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("calculator_menu") { CalculatorMenu(navController = navController) }
-            composable("emissions_trash") { EmissionsTrashMenu() }
-            composable("emissions_transport") { EmissionsTransportMenu() }
-            composable("emissions_food") { EmissionsFoodMenu() }
-            composable("emissions_energy") { EmissionsEnergyMenu() }
+            composable("emissions_trash") { EmissionsTrashMenu(navController = navController) }
+            composable("emissions_transport") { EmissionsTransportMenu(navController = navController) }
+            composable("emissions_food") { EmissionsFoodMenu(navController = navController) }
+            composable("emissions_energy") { EmissionsEnergyMenu(navController = navController) }
         }
     }
 }

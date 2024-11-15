@@ -1,8 +1,9 @@
 package com.example.eco_life
 
+import android.content.Context
 import android.os.Build
-import androidx.compose.ui.graphics.vector.ImageVector
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -11,14 +12,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -29,40 +26,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eco_life.ui.theme.EcoLifeTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.runtime.LaunchedEffect
-import kotlinx.coroutines.delay
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntSize
-import com.example.ecoshops.data.DataSource
-import com.example.eco_life.VideogameMenu
-import kotlinx.coroutines.launch
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
-import com.google.android.gms.maps.model.Circle
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.eco_life.data.DBHandler
 import java.time.LocalDate
-import java.time.DayOfWeek
 
 class EmissionsFoodActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -70,15 +55,31 @@ class EmissionsFoodActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EcoLifeTheme {
-                EmissionsFoodMenu()
+                NavigationFoodEmissions()
             }
+        }
+    }
+}
+
+@Composable
+fun NavigationFoodEmissions() {
+    val navController = rememberNavController()
+    Scaffold(
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = "emissions_food",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable("calculator_menu") { CalculatorMenu(navController = navController) }
+            composable("emissions_food") { EmissionsFoodMenu(navController = navController) }
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MeatEmissions(onValueSelected: (Double) -> Unit) {
+fun MeatEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190, 190, 190)
     val green = Color(30, 132, 73)
@@ -88,8 +89,10 @@ fun MeatEmissions(onValueSelected: (Double) -> Unit) {
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Food"
-    var isInputValid by remember { mutableStateOf(true) }
     var selectedButton by remember { mutableStateOf<Int?>(null) }
+    var hours by remember { mutableStateOf(0.0) }
+    var hoursInput by remember { mutableStateOf("") }
+    var isInputValid by remember { mutableStateOf(true) }
 
     Row(
         modifier = Modifier
@@ -173,7 +176,48 @@ fun MeatEmissions(onValueSelected: (Double) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 20.dp,
+                top = 100.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 110.dp, start = 16.dp, end = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = hoursInput,
+                onValueChange = { input ->
+                    hoursInput = input
+                    val parsedValue = input.toDoubleOrNull()
+                    if (parsedValue != null) {
+                        hours = parsedValue
+                        isInputValid = true
+                    } else {
+                        isInputValid = false
+                    }
+                },
+                label = { Text("Ingrese los kilos consumidos (Decimal): ") },
+                isError = !isInputValid,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!isInputValid) {
+                Text(
+                    text = "Por favor, ingrese un valor con decimal.",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 80.dp,
                 start = 16.dp,
                 end = 20.dp
             ),
@@ -197,6 +241,7 @@ fun MeatEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -219,8 +264,8 @@ fun MeatEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
-                            if (emissionFactor != 0.0 ) {
-                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, 1.0)
+                            if (emissionFactor != 0.0 && hoursInput.isNotBlank() && isInputValid) {
+                                saveToFoodEmissions(context, emissionFactor, emissionValue, type, hours)
                             }
                         },
                         modifier = Modifier
@@ -247,7 +292,7 @@ fun MeatEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DairyEmissions(onValueSelected: (Double) -> Unit) {
+fun DairyEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190, 190, 190)
     val green = Color(30, 132, 73)
@@ -258,6 +303,8 @@ fun DairyEmissions(onValueSelected: (Double) -> Unit) {
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Food"
+    var hours by remember { mutableStateOf(0.0) }
+    var hoursInput by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
     var selectedButton by remember { mutableStateOf<Int?>(null) }
 
@@ -304,7 +351,47 @@ fun DairyEmissions(onValueSelected: (Double) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 20.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.Top
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 120.dp, start = 16.dp, end = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = hoursInput,
+                onValueChange = { input ->
+                    hoursInput = input
+                    val parsedValue = input.toDoubleOrNull()
+                    if (parsedValue != null) {
+                        hours = parsedValue
+                        isInputValid = true
+                    } else {
+                        isInputValid = false
+                    }
+                },
+                label = { Text("Ingrese los kilos consumidos (Decimal): ") },
+                isError = !isInputValid,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!isInputValid) {
+                Text(
+                    text = "Por favor, ingrese un valor con decimal.",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 100.dp,
                 start = 16.dp,
                 end = 20.dp
             ),
@@ -328,6 +415,7 @@ fun DairyEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -350,8 +438,8 @@ fun DairyEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
-                            if (emissionFactor != 0.0 ) {
-                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, 1.0)
+                            if (emissionFactor != 0.0 && hoursInput.isNotBlank() && isInputValid) {
+                                saveToFoodEmissions(context, emissionFactor, emissionValue, type, hours)
                             }
                         },
                         modifier = Modifier
@@ -378,7 +466,7 @@ fun DairyEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun FruitsVetablesEmissions(onValueSelected: (Double) -> Unit) {
+fun FruitsVetablesEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190, 190, 190)
     val green = Color(30, 132, 73)
@@ -389,7 +477,8 @@ fun FruitsVetablesEmissions(onValueSelected: (Double) -> Unit) {
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Food"
-    var hours by remember { mutableStateOf("") }
+    var hours by remember { mutableStateOf(0.0) }
+    var hoursInput by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
     var selectedButton by remember { mutableStateOf<Int?>(null) }
 
@@ -436,6 +525,47 @@ fun FruitsVetablesEmissions(onValueSelected: (Double) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
+                top = 100.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = hoursInput,
+                onValueChange = { input ->
+                    hoursInput = input
+                    val parsedValue = input.toDoubleOrNull()
+                    if (parsedValue != null) {
+                        hours = parsedValue
+                        isInputValid = true
+                    } else {
+                        isInputValid = false
+                    }
+                },
+                label = { Text("Ingrese los kilos consumidos (Decimal): ") },
+                isError = !isInputValid,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!isInputValid) {
+                Text(
+                    text = "Por favor, ingrese un valor con decimal.",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
                 top = 20.dp,
                 start = 16.dp,
                 end = 20.dp
@@ -451,7 +581,7 @@ fun FruitsVetablesEmissions(onValueSelected: (Double) -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        top = 100.dp,
+                        top = 180.dp,
                         start = 44.dp,
                         end = 20.dp
                     ),
@@ -460,6 +590,7 @@ fun FruitsVetablesEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -482,8 +613,8 @@ fun FruitsVetablesEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
-                            if (emissionFactor != 0.0) {
-                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, 1.0)
+                            if (emissionFactor != 0.0 && hoursInput.isNotBlank() && isInputValid) {
+                                saveToFoodEmissions(context, emissionFactor, emissionValue, type, hours)
                             }
                         },
                         modifier = Modifier
@@ -510,7 +641,7 @@ fun FruitsVetablesEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ProcessedEmissions(onValueSelected: (Double) -> Unit) {
+fun ProcessedEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190, 190, 190)
     val green = Color(30, 132, 73)
@@ -521,7 +652,8 @@ fun ProcessedEmissions(onValueSelected: (Double) -> Unit) {
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
     val type = "Food"
-    var hours by remember { mutableStateOf("") }
+    var hours by remember { mutableStateOf(0.0) }
+    var hoursInput by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
     var selectedButton by remember { mutableStateOf<Int?>(null) }
 
@@ -685,7 +817,48 @@ fun ProcessedEmissions(onValueSelected: (Double) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 120.dp,
+                top = 100.dp,
+                start = 16.dp,
+                end = 20.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 240.dp, start = 16.dp, end = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = hoursInput,
+                onValueChange = { input ->
+                    hoursInput = input
+                    val parsedValue = input.toDoubleOrNull()
+                    if (parsedValue != null) {
+                        hours = parsedValue
+                        isInputValid = true
+                    } else {
+                        isInputValid = false
+                    }
+                },
+                label = { Text("Ingrese los kilos consumidos (Decimal): ") },
+                isError = !isInputValid,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!isInputValid) {
+                Text(
+                    text = "Por favor, ingrese un valor con decimal.",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 180.dp,
                 start = 16.dp,
                 end = 20.dp
             ),
@@ -709,6 +882,7 @@ fun ProcessedEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -731,8 +905,8 @@ fun ProcessedEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
-                            if (emissionFactor != 0.0) {
-                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, 1.0)
+                            if (emissionFactor != 0.0 && hoursInput.isNotBlank() && isInputValid) {
+                                saveToFoodEmissions(context, emissionFactor, emissionValue, type, hours)
                             }
                         },
                         modifier = Modifier
@@ -759,7 +933,7 @@ fun ProcessedEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EmissionsFoodMenu(){
+fun EmissionsFoodMenu(navController: NavController){
     //Valores estéticos
     val beige = Color(230,230,230)
     val green = Color(17,109,29)
@@ -828,7 +1002,7 @@ fun EmissionsFoodMenu(){
                             .clickable {
                                 selectedButton = value
                                 selectedScreen =
-                                    getFoodScreen(value) { selectedEmissionFactor ->
+                                    getFoodScreen(value, navController) { selectedEmissionFactor ->
                                         emissionFactor = selectedEmissionFactor.toInt()
                                     }
                             },
@@ -850,12 +1024,12 @@ fun EmissionsFoodMenu(){
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getFoodScreen(emissionFactor: Int, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
+fun getFoodScreen(emissionFactor: Int, navController: NavController, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
     return when (emissionFactor) {
-        1 -> { { MeatEmissions(onValueSelected) } }
-        2 -> { { DairyEmissions(onValueSelected) } }
-        3 -> { { FruitsVetablesEmissions(onValueSelected) } }
-        4 -> { { ProcessedEmissions(onValueSelected) } }
+        1 -> { { MeatEmissions(onValueSelected, navController) } }
+        2 -> { { DairyEmissions(onValueSelected, navController) } }
+        3 -> { { FruitsVetablesEmissions(onValueSelected, navController) } }
+        4 -> { { ProcessedEmissions(onValueSelected, navController) } }
         else -> { {} }
     }
 }
@@ -898,10 +1072,23 @@ fun ButtonFoodEmissions(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
+fun saveToFoodEmissions(context: Context, emissionFactor: Double, emissionValue: Double, type: String, hours: Double) {
+    val dbHandler = DBHandler(context)
+    val currentDate = LocalDate.now().toString()
+
+    dbHandler.addEmission(emissionFactor, emissionValue, currentDate, type, hours)
+    Toast.makeText(
+        context,
+        "El impato de los alimentos desechados ha sido registrado.",
+        Toast.LENGTH_SHORT
+    ).show()
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun EmissionsFoodPreview() {
     EcoLifeTheme {
-        EmissionsFoodMenu()
+        NavigationFoodEmissions()
     }
 }

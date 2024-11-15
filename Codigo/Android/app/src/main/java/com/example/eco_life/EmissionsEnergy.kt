@@ -1,7 +1,9 @@
 package com.example.eco_life
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -39,6 +41,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.eco_life.data.DBHandler
+import java.time.LocalDate
 
 class EmissionsEnergyActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -46,15 +54,31 @@ class EmissionsEnergyActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EcoLifeTheme {
-                EmissionsEnergyMenu()
+                NavigationEnergyEmissions()
             }
+        }
+    }
+}
+
+@Composable
+fun NavigationEnergyEmissions() {
+    val navController = rememberNavController()
+    Scaffold(
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = "emissions_energy",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable("calculator_menu") { CalculatorMenu(navController = navController) }
+            composable("emissions_energy") { EmissionsEnergyMenu(navController = navController) }
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun KitchenEmissions(onValueSelected: (Double) -> Unit) {
+fun KitchenEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
@@ -249,6 +273,7 @@ fun KitchenEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -273,7 +298,7 @@ fun KitchenEmissions(onValueSelected: (Double) -> Unit) {
                         onClick = {
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
-                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                saveToEnergyEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -300,7 +325,7 @@ fun KitchenEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit) {
+fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
@@ -486,6 +511,7 @@ fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -510,7 +536,7 @@ fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit) {
                         onClick = {
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
-                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                saveToEnergyEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -537,7 +563,7 @@ fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EntertainmentEmissions(onValueSelected: (Double) -> Unit) {
+fun EntertainmentEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
@@ -732,6 +758,7 @@ fun EntertainmentEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -756,7 +783,7 @@ fun EntertainmentEmissions(onValueSelected: (Double) -> Unit) {
                         onClick = {
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
-                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                saveToEnergyEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -783,7 +810,7 @@ fun EntertainmentEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RefrigerationEmissions(onValueSelected: (Double) -> Unit) {
+fun RefrigerationEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
@@ -938,6 +965,7 @@ fun RefrigerationEmissions(onValueSelected: (Double) -> Unit) {
                 Column {
                     Button(
                         onClick = {
+                            navController.navigate("calculator_menu")
                         },
                         modifier = Modifier
                             .height(80.dp)
@@ -962,7 +990,7 @@ fun RefrigerationEmissions(onValueSelected: (Double) -> Unit) {
                         onClick = {
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
-                                saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                saveToEnergyEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
                             }
                         },
                         modifier = Modifier
@@ -989,7 +1017,7 @@ fun RefrigerationEmissions(onValueSelected: (Double) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EmissionsEnergyMenu(){
+fun EmissionsEnergyMenu(navController: NavController){
     //Valores estéticos
     val beige = Color(230,230,230)
     val green = Color(17,109,29)
@@ -1059,7 +1087,7 @@ fun EmissionsEnergyMenu(){
                             .clickable {
                                 selectedButton = value
                                 selectedScreen =
-                                    getEnergyScreen(value) { selectedEmissionFactor ->
+                                    getEnergyScreen(value, navController) { selectedEmissionFactor ->
                                         emissionFactor = selectedEmissionFactor.toInt()
                                     }
                             },
@@ -1081,12 +1109,12 @@ fun EmissionsEnergyMenu(){
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getEnergyScreen(emissionFactor: Int, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
+fun getEnergyScreen(emissionFactor: Int, navController: NavController, onValueSelected: (Double) -> Unit): @Composable () -> Unit {
     return when (emissionFactor) {
-        1 -> { { KitchenEmissions(onValueSelected) } }
-        2 -> { { ElectrodomesticsEmissions(onValueSelected) } }
-        3 -> { { EntertainmentEmissions(onValueSelected) } }
-        4 -> { { RefrigerationEmissions(onValueSelected) } }
+        1 -> { { KitchenEmissions(onValueSelected, navController) } }
+        2 -> { { ElectrodomesticsEmissions(onValueSelected, navController) } }
+        3 -> { { EntertainmentEmissions(onValueSelected, navController) } }
+        4 -> { { RefrigerationEmissions(onValueSelected, navController) } }
         else -> { {} }
     }
 }
@@ -1129,10 +1157,23 @@ fun ButtonEnergyEmissions(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
+fun saveToEnergyEmissions(context: Context, emissionFactor: Double, emissionValue: Double, type: String, hours: Double) {
+    val dbHandler = DBHandler(context)
+    val currentDate = LocalDate.now().toString()
+
+    dbHandler.addEmission(emissionFactor, emissionValue, currentDate, type, hours)
+    Toast.makeText(
+        context,
+        "El impacto del consumo eléctrico ha sido registrado",
+        Toast.LENGTH_SHORT
+    ).show()
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun EmissionsEnergyPreview() {
     EcoLifeTheme {
-        EmissionsEnergyMenu()
+        NavigationEnergyEmissions()
     }
 }
