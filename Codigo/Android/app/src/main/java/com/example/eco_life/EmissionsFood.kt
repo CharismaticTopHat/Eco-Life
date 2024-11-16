@@ -266,6 +266,7 @@ fun MeatEmissions(onValueSelected: (Double) -> Unit, navController: NavControlle
                         onClick = {
                             if (emissionFactor != 0.0 && hoursInput.isNotBlank() && isInputValid) {
                                 saveToFoodEmissions(context, emissionFactor, emissionValue, type, hours)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier
@@ -440,6 +441,7 @@ fun DairyEmissions(onValueSelected: (Double) -> Unit, navController: NavControll
                         onClick = {
                             if (emissionFactor != 0.0 && hoursInput.isNotBlank() && isInputValid) {
                                 saveToFoodEmissions(context, emissionFactor, emissionValue, type, hours)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier
@@ -615,6 +617,7 @@ fun FruitsVetablesEmissions(onValueSelected: (Double) -> Unit, navController: Na
                         onClick = {
                             if (emissionFactor != 0.0 && hoursInput.isNotBlank() && isInputValid) {
                                 saveToFoodEmissions(context, emissionFactor, emissionValue, type, hours)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier
@@ -907,6 +910,7 @@ fun ProcessedEmissions(onValueSelected: (Double) -> Unit, navController: NavCont
                         onClick = {
                             if (emissionFactor != 0.0 && hoursInput.isNotBlank() && isInputValid) {
                                 saveToFoodEmissions(context, emissionFactor, emissionValue, type, hours)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier

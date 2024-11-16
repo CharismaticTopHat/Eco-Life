@@ -255,6 +255,7 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit, navController: NavContro
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
                                 saveToTrashEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier
@@ -445,6 +446,7 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit, navController: NavContro
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
                                 saveToTrashEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier
@@ -722,6 +724,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit, navController: NavCont
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
                                 saveToTrashEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -49,15 +48,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.eco_life.VideogameMenu
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.*
-import androidx.compose.material.*
 import androidx.compose.ui.Alignment
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.background
-import androidx.compose.ui.res.stringResource
-import com.google.android.gms.maps.model.Circle
+import androidx.compose.ui.platform.LocalContext
+import com.example.eco_life.data.DBHandler
 import java.time.LocalDate
 import java.time.DayOfWeek
 
@@ -295,31 +289,43 @@ fun StartMenu() {
         R.string.challenge1001
     )
     val coroutineScope = rememberCoroutineScope()
-    var dayStatus by remember { mutableStateOf(Array(7) { "waiting" }) }
     val currentDate = LocalDate.now()
     val currentDayOfWeek = currentDate.dayOfWeek.value
-    var currentStreak by remember { mutableStateOf(0) }
-    var highestStreak by remember { mutableStateOf(0) }
     var lastCompletedDay by remember { mutableStateOf<LocalDate?>(null) }
+    val context = LocalContext.current
+    val dbHandler = remember { DBHandler(context) }
+    val (initialDayStatus, initialCurrentStreak, initialHighestStreak) = remember { dbHandler.getUserProgress() }
+    var dayStatus by remember { mutableStateOf(initialDayStatus) }
+    var currentStreak by remember { mutableStateOf(initialCurrentStreak) }
+    var highestStreak by remember { mutableStateOf(initialHighestStreak) }
 
     LaunchedEffect(currentDate) {
+        val lastDay = lastCompletedDay // Assign to a local variable
+
+        if (currentDayOfWeek == DayOfWeek.MONDAY.value) {
+            if (lastDay == null || lastDay.isBefore(currentDate.minusDays(6))) {
+                dayStatus = arrayOf("waiting", "waiting", "waiting", "waiting", "waiting", "waiting", "waiting")
+                currentStreak = 0
+            }
+        }
+
         val previousDayStatus = dayStatus[currentDayOfWeek - 1]
 
         if (previousDayStatus == "completed") {
-            if (lastCompletedDay != currentDate.minusDays(1)) {
+            if (lastDay != currentDate.minusDays(1)) {
                 currentStreak = 1
             } else {
                 currentStreak += 1
             }
-
             if (currentStreak > highestStreak) {
                 highestStreak = currentStreak
             }
-
             lastCompletedDay = currentDate
-        } else if (previousDayStatus == "waiting" || lastCompletedDay != currentDate.minusDays(1)) {
+        } else if (previousDayStatus == "waiting" || lastDay != currentDate.minusDays(1)) {
             currentStreak = 0
         }
+
+        dbHandler.updateUserProgress(dayStatus, currentStreak, highestStreak)
     }
     Column(
         modifier = Modifier
@@ -465,6 +471,7 @@ fun StartMenu() {
                         currentChallengeId = R.string.challenge999
                         dayStatus[currentDayOfWeek - 1] = "completed"
                         coroutineScope.launch {
+                            dbHandler.updateUserProgress(dayStatus, currentStreak, highestStreak)
                             delay(5000)
                             currentChallengeId = R.string.challenge0
                         }

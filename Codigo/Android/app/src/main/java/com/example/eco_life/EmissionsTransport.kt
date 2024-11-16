@@ -298,6 +298,7 @@ fun LandTransportEmissions(onValueSelected: (Double) -> Unit, navController: Nav
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
                                 saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier
@@ -465,6 +466,7 @@ fun AirTransportEmissions(onValueSelected: (Double) -> Unit, navController: NavC
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
                                 saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier
@@ -663,6 +665,7 @@ fun WaterTransportEmissions(onValueSelected: (Double) -> Unit, navController: Na
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
                                 saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier
@@ -818,6 +821,7 @@ fun OtherTransportEmissions(onValueSelected: (Double) -> Unit, navController: Na
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
                                 saveToTransportEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier

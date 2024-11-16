@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.eco_life"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+    implementation("co.yml:ycharts:2.1.0")
     implementation("androidx.navigation:navigation-compose:2.5.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

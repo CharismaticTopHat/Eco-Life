@@ -29,14 +29,12 @@ import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -51,8 +49,48 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.eco_life.data.DBHandler
 import com.example.eco_life.ui.theme.EcoLifeTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.ui.text.TextStyle
+import android.graphics.Typeface
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Divider
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import co.yml.charts.axis.AxisData
+import co.yml.charts.common.components.Legends
+import co.yml.charts.common.extensions.formatToSinglePrecision
+import co.yml.charts.common.model.LegendsConfig
+import co.yml.charts.common.model.Point
+import co.yml.charts.common.utils.DataUtils
+import co.yml.charts.ui.linechart.LineChart
+import co.yml.charts.ui.linechart.model.GridLines
+import co.yml.charts.ui.linechart.model.IntersectionPoint
+import co.yml.charts.ui.linechart.model.Line
+import co.yml.charts.ui.linechart.model.LineChartData
+import co.yml.charts.ui.linechart.model.LinePlotData
+import co.yml.charts.ui.linechart.model.LineStyle
+import co.yml.charts.ui.linechart.model.LineType
+import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
+import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
+import co.yml.charts.ui.linechart.model.ShadowUnderLine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class CalculatorActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
@@ -100,16 +138,21 @@ fun CalculatorMenu(navController: NavController) {
     var foodEmissions by remember { mutableStateOf(0.0) }
     var trashEmissions by remember { mutableStateOf(0.0) }
     val context = LocalContext.current
+    val dbHandler = remember { DBHandler(context) }
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(Unit) {
-        transportEmissions = getTotalEmissionsForTransport(context)
-        energyEmissions = getTotalEmissionsForEnergy(context)
-        foodEmissions = getTotalEmissionsForFood(context)
-        trashEmissions = getTotalEmissionsForTrash(context)
+        withContext(Dispatchers.IO) {
+            transportEmissions = getTotalEmissionsForTransport(dbHandler)
+            energyEmissions = getTotalEmissionsForEnergy(dbHandler)
+            foodEmissions = getTotalEmissionsForFood(dbHandler)
+            trashEmissions = getTotalEmissionsForTrash(dbHandler)
+        }
     }
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .verticalScroll(scrollState)
             .background(Color.White)
     ) {
         Row(
@@ -563,7 +606,7 @@ fun CalculatorMenu(navController: NavController) {
                 ) {
                     Icon(
                         Icons.Default.Delete,
-                        contentDescription = "Residues"
+                        contentDescription = "Residuos"
                     )
                 }
                 Column(
@@ -666,31 +709,112 @@ fun CalculatorMenu(navController: NavController) {
                 )
             }
         }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Emisiones Diarias",
+                fontSize = 24.sp,
+                color = customColor,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+            LineChartScreen()
+        }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getTotalEmissionsForTransport(context: Context): Double {
-    val dbHandler = DBHandler(context)
+fun getTotalEmissionsForTransport(dbHandler: DBHandler): Double {
     return dbHandler.getEmissionsByType("Transport")
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getTotalEmissionsForEnergy(context: Context): Double {
-    val dbHandler = DBHandler(context)
+fun getTotalEmissionsForEnergy(dbHandler: DBHandler): Double {
     return dbHandler.getEmissionsByType("Energy")
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getTotalEmissionsForFood(context: Context): Double {
-    val dbHandler = DBHandler(context)
+fun getTotalEmissionsForFood(dbHandler: DBHandler): Double {
     return dbHandler.getEmissionsByType("Food")
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getTotalEmissionsForTrash(context: Context): Double {
-    val dbHandler = DBHandler(context)
+fun getTotalEmissionsForTrash(dbHandler: DBHandler): Double {
     return dbHandler.getEmissionsByType("Trash")
+}
+
+@Composable
+fun LineChartScreen(){
+    val steps = 10
+    val pointsData = listOf(
+        Point(0f, 40f),
+        Point(1f, 90f),
+        Point(2f, 0f),
+        Point(3f, 60f),
+        Point(4f, 10f)
+    )
+
+    val xAxisData = AxisData.Builder()
+        .axisStepSize(60.dp)
+        .backgroundColor(Color.Transparent)
+        .steps(pointsData.size -1)
+        .labelData { i -> i.toString()}
+        .labelAndAxisLinePadding(15.dp)
+        .axisLineColor(Color.Black)
+        .axisLabelColor(Color.Black)
+        .build()
+
+    val yAxisData = AxisData.Builder()
+        .steps(steps)
+        .backgroundColor(Color.Transparent)
+        .labelAndAxisLinePadding(20.dp)
+        .labelData { i ->
+            val yScale = 100 / steps
+            (i * yScale).toString()
+        }
+        .axisLineColor(Color.Black)
+        .axisLabelColor(Color.Black)
+        .build()
+
+    val lineChartData = LineChartData(
+        linePlotData =  LinePlotData(
+            lines = listOf(
+                Line(
+                    dataPoints = pointsData,
+                    LineStyle(
+                        color = Color.Black,
+                        lineType = LineType.SmoothCurve(isDotted = false)
+                    ),
+                    IntersectionPoint(
+                        color = Color.Gray
+                    ),
+                    SelectionHighlightPoint(color = Color.Black),
+                    ShadowUnderLine(
+                        alpha = 0.5f,
+                        brush = Brush.verticalGradient(
+                            colors =  listOf(
+                                Color.Red,
+                                Color.Transparent
+                            )
+                        )
+                    ),
+                    SelectionHighlightPopUp()
+                )
+            ),
+        ),
+        backgroundColor = Color.White,
+        xAxisData = xAxisData,
+        yAxisData = yAxisData,
+        gridLines = GridLines(color = Color.Black)
+    )
+
+    LineChart(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp),
+        lineChartData = lineChartData)
 }
 
 

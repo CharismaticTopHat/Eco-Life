@@ -299,6 +299,7 @@ fun KitchenEmissions(onValueSelected: (Double) -> Unit, navController: NavContro
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
                                 saveToEnergyEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier
@@ -537,6 +538,7 @@ fun ElectrodomesticsEmissions(onValueSelected: (Double) -> Unit, navController: 
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
                                 saveToEnergyEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier
@@ -784,6 +786,7 @@ fun EntertainmentEmissions(onValueSelected: (Double) -> Unit, navController: Nav
                             val hoursDouble = hours.toDoubleOrNull()
                             if (emissionFactor != 0.0 && hoursDouble != null) {
                                 saveToEnergyEmissions(context, emissionFactor, emissionValue, type, hoursDouble)
+                                navController.navigate("calculator_menu")
                             }
                         },
                         modifier = Modifier
