@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+    implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
     implementation("co.yml:ycharts:2.1.0")
     implementation("androidx.navigation:navigation-compose:2.5.0")
     implementation(libs.androidx.core.ktx)
@@ -73,4 +74,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.sqlite:sqlite:2.1.0")
+    implementation(kotlin("script-runtime"))
 }

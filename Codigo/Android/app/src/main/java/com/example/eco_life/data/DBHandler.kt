@@ -26,12 +26,6 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
                 + "$HOURS_COL REAL)")
         db.execSQL(emissionTableQuery)
 
-        val dailyEmissionTableQuery = ("CREATE TABLE $DAILY_EMISSIONS_TABLE_NAME (" +
-                "$COLUMN_IDENTIFIER INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "$COLUMN_DATE TEXT, " +
-                "$COLUMN_TOTAL_EMISSION REAL)")
-        db.execSQL(dailyEmissionTableQuery)
-
         val userProgressTableQuery = ("CREATE TABLE $USER_PROGRESS_TABLE_NAME ("
                 + "$COLUMN_ID INTEGER PRIMARY KEY, "
                 + "$COLUMN_DAY_STATUS TEXT, "
@@ -62,30 +56,6 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         values.put(HOURS_COL, hours)
         db.insert(TABLE_NAME, null, values)
         db.close()
-    }
-
-    fun getDailyEmissionPoints(): List<Point> {
-        val db = readableDatabase
-        val query = """
-        SELECT $DATE_COL AS date, SUM($EMISSION_VALUE_COL) AS totalEmission 
-        FROM $TABLE_NAME 
-        GROUP BY $DATE_COL
-        ORDER BY $DATE_COL ASC
-    """
-        val cursor = db.rawQuery(query, null)
-        val points = mutableListOf<Point>()
-        var xIndex = 0f
-
-        if (cursor.moveToFirst()) {
-            do {
-                val totalEmission = cursor.getFloat(cursor.getColumnIndexOrThrow("totalEmission"))
-                points.add(Point(xIndex, totalEmission))
-                xIndex += 1f
-            } while (cursor.moveToNext())
-        }
-        cursor.close()
-        db.close()
-        return points
     }
 
     fun deleteEmission(id: Int) {
@@ -121,6 +91,48 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         db.execSQL("DROP TABLE IF EXISTS $USER_PROGRESS_TABLE_NAME")
         onCreate(db)
+    }
+
+    fun countDistinctDates(): Int {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT COUNT(DISTINCT $DATE_COL) FROM $TABLE_NAME", null)
+        var count = 0
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0)
+        }
+        cursor.close()
+        db.close()
+        return count
+    }
+
+    fun getEmissionData(): Pair<List<String>, List<Float>> {
+        val db = this.readableDatabase
+
+        val cursor = db.rawQuery(
+            """
+        SELECT $DATE_COL, 
+               SUM($EMISSION_FACTOR_COL * $EMISSION_VALUE_COL * $HOURS_COL) AS totalEmission
+        FROM $TABLE_NAME
+        GROUP BY $DATE_COL
+        """, null
+        )
+
+        val dates = mutableListOf<String>()
+        val emissions = mutableListOf<Float>()
+
+        if (cursor.moveToFirst()) {
+            do {
+                val date = cursor.getString(0)
+                val totalEmission = cursor.getFloat(1)
+                dates.add(date)
+                emissions.add(totalEmission)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+
+        return Pair(dates, emissions)
     }
 
     fun getEmissionsByType(type: String): Double {
@@ -183,10 +195,5 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         private const val COLUMN_DAY_STATUS = "day_status"
         private const val COLUMN_CURRENT_STREAK = "current_streak"
         private const val COLUMN_HIGHEST_STREAK = "highest_streak"
-
-        private const val DAILY_EMISSIONS_TABLE_NAME = "dailyEmissions"
-        private const val COLUMN_IDENTIFIER = "id"
-        private const val COLUMN_DATE = "date"
-        private const val COLUMN_TOTAL_EMISSION = "total_emissions"
     }
 }

@@ -70,6 +70,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import co.yml.charts.axis.AxisData
 import co.yml.charts.common.components.Legends
 import co.yml.charts.common.extensions.formatToSinglePrecision
@@ -87,6 +88,11 @@ import co.yml.charts.ui.linechart.model.LineType
 import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -720,7 +726,7 @@ fun CalculatorMenu(navController: NavController) {
                 color = customColor,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
-            LineChartScreen()
+            EmissionsLineGraph(dbHandler = dbHandler)
         }
     }
 }
@@ -746,77 +752,68 @@ fun getTotalEmissionsForTrash(dbHandler: DBHandler): Double {
 }
 
 @Composable
-fun LineChartScreen(){
-    val steps = 10
-    val pointsData = listOf(
-        Point(0f, 40f),
-        Point(1f, 90f),
-        Point(2f, 0f),
-        Point(3f, 60f),
-        Point(4f, 10f)
-    )
+fun EmissionsLineGraph(dbHandler: DBHandler) {
+    val (dates, emissionValues) = remember { dbHandler.getEmissionData() }
 
-    val xAxisData = AxisData.Builder()
-        .axisStepSize(60.dp)
-        .backgroundColor(Color.Transparent)
-        .steps(pointsData.size -1)
-        .labelData { i -> i.toString()}
-        .labelAndAxisLinePadding(15.dp)
-        .axisLineColor(Color.Black)
-        .axisLabelColor(Color.Black)
-        .build()
+    val entries = emissionValues.mapIndexed { index, value ->
+        Entry(index.toFloat(), value)
+    }
 
-    val yAxisData = AxisData.Builder()
-        .steps(steps)
-        .backgroundColor(Color.Transparent)
-        .labelAndAxisLinePadding(20.dp)
-        .labelData { i ->
-            val yScale = 100 / steps
-            (i * yScale).toString()
-        }
-        .axisLineColor(Color.Black)
-        .axisLabelColor(Color.Black)
-        .build()
+    AndroidView(
+        factory = { context ->
+            com.github.mikephil.charting.charts.LineChart(context).apply {
+                val dataSet = LineDataSet(entries, "Huella de Carbono (Kg)").apply {
+                    color = android.graphics.Color.BLUE
+                    valueTextColor = android.graphics.Color.BLACK
+                    lineWidth = 2f
+                    circleRadius = 5f
+                    setCircleColor(android.graphics.Color.RED)
+                    mode = LineDataSet.Mode.CUBIC_BEZIER
+                    setDrawValues(false) // Optional: Hides value labels on points
+                }
 
-    val lineChartData = LineChartData(
-        linePlotData =  LinePlotData(
-            lines = listOf(
-                Line(
-                    dataPoints = pointsData,
-                    LineStyle(
-                        color = Color.Black,
-                        lineType = LineType.SmoothCurve(isDotted = false)
-                    ),
-                    IntersectionPoint(
-                        color = Color.Gray
-                    ),
-                    SelectionHighlightPoint(color = Color.Black),
-                    ShadowUnderLine(
-                        alpha = 0.5f,
-                        brush = Brush.verticalGradient(
-                            colors =  listOf(
-                                Color.Red,
-                                Color.Transparent
-                            )
-                        )
-                    ),
-                    SelectionHighlightPopUp()
-                )
-            ),
-        ),
-        backgroundColor = Color.White,
-        xAxisData = xAxisData,
-        yAxisData = yAxisData,
-        gridLines = GridLines(color = Color.Black)
-    )
+                this.data = LineData(dataSet)
 
-    LineChart(
+                this.legend.apply {
+                    isEnabled = true // Show legend with label "Huella de Carbono (Kg)"
+                    verticalAlignment = Legend.LegendVerticalAlignment.TOP
+                    horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+                    orientation = Legend.LegendOrientation.HORIZONTAL
+                    textColor = android.graphics.Color.BLACK
+                }
+
+                this.xAxis.apply {
+                    position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+                    setDrawGridLines(false)
+                    textColor = android.graphics.Color.BLACK
+                    valueFormatter = IndexAxisValueFormatter(dates)
+                    granularity = 1f
+                    labelRotationAngle = -45f
+                    axisMinimum = 0f
+                    axisMaximum = entries.size.toFloat() + 0.5f
+                }
+
+                this.axisLeft.apply {
+                    setDrawGridLines(true)
+                    textColor = android.graphics.Color.BLACK
+                }
+
+                this.axisRight.isEnabled = false
+
+                this.description.apply {
+                    text = ""
+                }
+
+                this.setViewPortOffsets(32f, 64f, 32f, 128f) // Increase top offset for the legend
+
+                this.animateX(1000)
+            }
+        },
         modifier = Modifier
             .fillMaxWidth()
-            .height(300.dp),
-        lineChartData = lineChartData)
+            .height(300.dp)
+    )
 }
-
 
 @Composable
 fun CalculatorPreview() {

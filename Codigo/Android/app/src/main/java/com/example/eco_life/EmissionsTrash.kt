@@ -91,7 +91,7 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit, navController: NavContro
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
-    val type = "Energy"
+    val type = "Trash"
     var hours by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
     var selectedButton by remember { mutableStateOf<Int?>(null) }
