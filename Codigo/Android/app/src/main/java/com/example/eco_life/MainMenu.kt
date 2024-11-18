@@ -89,7 +89,7 @@ fun Navigation() {
                 placeList = DataSource().loadEcoPlaces(),
                 modifier = Modifier.padding(innerPadding)
             ) }
-            composable("videogame") { VideogameMenu() }
+            composable("videogame") { GameScreen() }
         }
     }
 }
