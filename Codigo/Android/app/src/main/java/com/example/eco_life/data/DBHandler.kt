@@ -38,6 +38,14 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
                     "VALUES (1, 'waiting,waiting,waiting,waiting,waiting,waiting,waiting', 0, 0)"
         )
 
+        // Crear tabla para la puntuación más alta
+        val highScoreTableQuery = ("CREATE TABLE $HIGH_SCORE_TABLE_NAME ("
+                + "$HIGH_SCORE_ID_COL INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "$HIGH_SCORE_COL INTEGER)")
+        db.execSQL(highScoreTableQuery)
+        // Insertar un valor inicial de 0 para el récord
+        db.execSQL("INSERT INTO $HIGH_SCORE_TABLE_NAME ($HIGH_SCORE_COL) VALUES (0)")
+
     }
 
     fun addEmission(
@@ -179,9 +187,38 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         db.close()
     }
 
+    fun updateHighScore(newScore: Int) {
+        val db = this.writableDatabase
+        val currentHighScore = getHighScore() // No cerramos aquí
+        if (newScore > currentHighScore) {
+            val values = ContentValues().apply {
+                put(HIGH_SCORE_COL, newScore)
+            }
+            db.update(HIGH_SCORE_TABLE_NAME, values, null, null)
+        }
+        // db.close() se elimina
+    }
+
+    fun getHighScore(): Int {
+        val db = this.readableDatabase
+        var highScore = 0
+        val cursor = db.rawQuery("SELECT $HIGH_SCORE_COL FROM $HIGH_SCORE_TABLE_NAME LIMIT 1", null)
+        if (cursor.moveToFirst()) {
+            highScore = cursor.getInt(cursor.getColumnIndexOrThrow(HIGH_SCORE_COL))
+        }
+        cursor.close() // Solo cerramos el cursor
+        // db.close() se elimina
+        return highScore
+    }
+
+
+
+
+
+
     companion object {
         private const val DB_NAME = "Eco-Life"
-        private const val DB_VERSION = 1
+        private const val DB_VERSION = 2 //1
         private const val TABLE_NAME = "emissions"
         private const val ID_COL = "id"
         private const val EMISSION_FACTOR_COL = "emissionFactor"
@@ -195,5 +232,11 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         private const val COLUMN_DAY_STATUS = "day_status"
         private const val COLUMN_CURRENT_STREAK = "current_streak"
         private const val COLUMN_HIGHEST_STREAK = "highest_streak"
+
+        //GAME
+        private const val HIGH_SCORE_TABLE_NAME = "high_scores"
+        private const val HIGH_SCORE_ID_COL = "id"
+        private const val HIGH_SCORE_COL = "score"
+
     }
 }
