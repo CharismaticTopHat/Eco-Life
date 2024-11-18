@@ -82,7 +82,7 @@ fun NavigationFoodEmissions() {
 fun MeatEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190, 190, 190)
-    val green = Color(30, 132, 73)
+    val green = Color(0, 154, 20)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
     val buttonCornerRadius = 12.dp
@@ -296,7 +296,7 @@ fun MeatEmissions(onValueSelected: (Double) -> Unit, navController: NavControlle
 fun DairyEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190, 190, 190)
-    val green = Color(30, 132, 73)
+    val green = Color(0, 154, 20)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
     val customColor = Color(30, 132, 73 )
@@ -471,10 +471,9 @@ fun DairyEmissions(onValueSelected: (Double) -> Unit, navController: NavControll
 fun FruitsVetablesEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190, 190, 190)
-    val green = Color(30, 132, 73)
+    val green = Color(0, 154, 20)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
@@ -647,10 +646,9 @@ fun FruitsVetablesEmissions(onValueSelected: (Double) -> Unit, navController: Na
 fun ProcessedEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190, 190, 190)
-    val green = Color(30, 132, 73)
+    val green = Color(0, 154, 20)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
@@ -940,7 +938,7 @@ fun ProcessedEmissions(onValueSelected: (Double) -> Unit, navController: NavCont
 fun EmissionsFoodMenu(navController: NavController){
     //Valores estéticos
     val beige = Color(230,230,230)
-    val green = Color(17,109,29)
+    val green = Color(0, 154, 20)
     val textSize = 16.sp
     var emissionFactor by remember { mutableStateOf(0) }
     var selectedScreen by remember { mutableStateOf<@Composable () -> Unit>({}) }
@@ -965,7 +963,7 @@ fun EmissionsFoodMenu(navController: NavController){
                     fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.Bold,
                     fontSize = textSize*2,
-                    color = Color.Green,
+                    color = green,
                     modifier = Modifier
                         .padding(
                             top = 8.dp,

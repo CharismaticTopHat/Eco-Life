@@ -82,7 +82,7 @@ fun LandTransportEmissions(onValueSelected: (Double) -> Unit, navController: Nav
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val green = Color(30, 132, 73 )
+    val green = Color(0, 154, 20)
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
@@ -330,7 +330,7 @@ fun AirTransportEmissions(onValueSelected: (Double) -> Unit, navController: NavC
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val green = Color(30, 132, 73 )
+    val green = Color(0, 154, 20)
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
@@ -498,7 +498,7 @@ fun WaterTransportEmissions(onValueSelected: (Double) -> Unit, navController: Na
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val green = Color(30, 132, 73 )
+    val green = Color(0, 154, 20)
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
@@ -695,7 +695,7 @@ fun WaterTransportEmissions(onValueSelected: (Double) -> Unit, navController: Na
 fun OtherTransportEmissions(onValueSelected: (Double) -> Unit, navController: NavController) {
     val context = LocalContext.current
     val beige = Color(190, 190, 190)
-    val green = Color(30, 132, 73)
+    val green = Color(0, 154, 20)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
     val customColor = Color(30, 132, 73 )
@@ -851,8 +851,7 @@ fun OtherTransportEmissions(onValueSelected: (Double) -> Unit, navController: Na
 fun EmissionsTransportMenu(navController: NavController) {
     // Valores estéticos
     val beige = Color(230, 230, 230)
-    val green = Color(30, 132, 73)
-
+    val green = Color(0, 154, 20)
     var emissionFactor by remember { mutableStateOf(0) }
     var selectedScreen by remember { mutableStateOf<@Composable () -> Unit>({}) }
     var selectedButton by remember { mutableStateOf<Int?>(null) }

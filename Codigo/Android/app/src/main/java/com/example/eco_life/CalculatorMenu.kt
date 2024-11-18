@@ -146,6 +146,7 @@ fun CalculatorMenu(navController: NavController) {
     val context = LocalContext.current
     val dbHandler = remember { DBHandler(context) }
     val scrollState = rememberScrollState()
+    val buttonsGreen = Color(0, 154, 20)
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
@@ -165,7 +166,7 @@ fun CalculatorMenu(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
-                .background(Color.Green)
+                .background(buttonsGreen)
         ) {
             Column(
                 modifier = Modifier.weight(1f),
@@ -277,8 +278,8 @@ fun CalculatorMenu(navController: NavController) {
                                 bottom = 16.dp
                             ),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Green,
-                            contentColor = headerGreen
+                            backgroundColor = buttonsGreen,
+                            contentColor = Color.White
                         )
                     ) {
                         Text(
@@ -403,8 +404,8 @@ fun CalculatorMenu(navController: NavController) {
                                 bottom = 16.dp
                             ),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Green,
-                            contentColor = headerGreen
+                            backgroundColor = buttonsGreen,
+                            contentColor = Color.White
                         )
                     ) {
                         Text(
@@ -527,8 +528,8 @@ fun CalculatorMenu(navController: NavController) {
                                 bottom = 16.dp
                             ),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Green,
-                            contentColor = headerGreen
+                            backgroundColor = buttonsGreen,
+                            contentColor = Color.White
                         )
                     ) {
                         Text(
@@ -651,8 +652,8 @@ fun CalculatorMenu(navController: NavController) {
                                 bottom = 16.dp
                             ),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Green,
-                            contentColor = headerGreen
+                            backgroundColor = buttonsGreen,
+                            contentColor = Color.White
                         )
                     ) {
                         Text(

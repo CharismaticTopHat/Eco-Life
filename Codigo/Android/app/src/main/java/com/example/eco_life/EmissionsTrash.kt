@@ -87,7 +87,7 @@ fun RecycleEmissions(onValueSelected: (Double) -> Unit, navController: NavContro
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val green = Color(30, 132, 73 )
+    val green = Color(0, 154, 20)
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
@@ -287,7 +287,7 @@ fun OrganicEmissions(onValueSelected: (Double) -> Unit, navController: NavContro
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val green = Color(30, 132, 73 )
+    val green = Color(0, 154, 20)
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
@@ -478,7 +478,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit, navController: NavCont
     val beige = Color(190,190,190)
     val headerGreen = Color(17,109,29)
     val textSize = 16.sp
-    val green = Color(30, 132, 73 )
+    val green = Color(0, 154, 20)
     val buttonCornerRadius = 12.dp
     var emissionFactor by remember { mutableStateOf(0.0) }
     var emissionValue by remember { mutableStateOf(0.0) }
@@ -754,7 +754,7 @@ fun InorganicEmissions(onValueSelected: (Double) -> Unit, navController: NavCont
 fun EmissionsTrashMenu(navController: NavController){
     //Valores estéticos
     val beige = Color(230,230,230)
-    val green = Color(17,109,29)
+    val green = Color(0, 154, 20)
     val textSize = 16.sp
     var emissionFactor by remember { mutableStateOf(0) }
     var selectedScreen by remember { mutableStateOf<@Composable () -> Unit>({}) }

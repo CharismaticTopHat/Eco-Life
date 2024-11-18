@@ -97,6 +97,7 @@ fun Navigation() {
 //Barra de Navegación (Visual)
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
+    val generatorButtonGreen = Color(61, 198, 78)
     val items = listOf(
         NavigationItem.MainMenu,
         NavigationItem.CalculatorMenu,
@@ -104,7 +105,7 @@ fun BottomNavigationBar(navController: NavHostController) {
         NavigationItem.VideogameMenu
     )
     BottomNavigation(
-        backgroundColor = Color.Green,
+        backgroundColor = generatorButtonGreen,
         contentColor = Color.White
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -157,10 +158,10 @@ fun TextCarousel() {
     //Valores estéticos
     val lightGray = Color(194,194,194)
     val beige = Color(230,230,230)
-    val headerGreen = Color(17,109,29)
     val rowHeight = 120.dp
     val rowHeightPartial = 88.dp
     val buttonCornerRadius = 12.dp
+    val headerGreen = Color(15, 77, 23)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -274,6 +275,8 @@ fun StartMenu() {
     val textHeight = textSize.value.dp
     val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
+    val titleGreen = Color(15, 77, 23)
+    val generatorButtonGreen = Color(61, 198, 78)
     //Variables de Funcionamiento
     var currentChallengeId by remember { mutableStateOf(R.string.challenge0) }
     val challengeIds = listOf(
@@ -336,7 +339,7 @@ fun StartMenu() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
-                .background(Color.Green)
+                .background(generatorButtonGreen)
         ) {
             Column(
                 modifier = Modifier.weight(1f),
@@ -381,7 +384,7 @@ fun StartMenu() {
                 text = "Recomendaciones",
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Bold,
-                color = customColor,
+                color = titleGreen,
                 fontSize = textSize*1.4,
                 modifier = Modifier
                     .padding(start = 16.dp)
@@ -406,7 +409,7 @@ fun StartMenu() {
                 text = "Retos",
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Bold,
-                color = customColor,
+                color = titleGreen,
                 fontSize = textSize*1.25,
                 modifier = Modifier
                     .padding(start = 32.dp)
@@ -723,8 +726,8 @@ fun StartMenu() {
                     )
                     .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Green,
-                    contentColor = headerGreen
+                    backgroundColor = generatorButtonGreen,
+                    contentColor = Color.Black
                 )
             ) {
                 Text(

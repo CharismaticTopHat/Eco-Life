@@ -103,6 +103,8 @@ fun EcoPlaceCard(place: EcoPlace){
 
 @Composable
 internal fun EcoPlaceList(placeList: List<EcoPlace>, modifier: Modifier = Modifier){
+    val titleGreen = Color(15, 77, 23)
+    val generatorButtonGreen = Color(61, 198, 78)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,7 +114,7 @@ internal fun EcoPlaceList(placeList: List<EcoPlace>, modifier: Modifier = Modifi
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
-                .background(Color.Green)
+                .background(generatorButtonGreen)
         ) {
             Column(
                 modifier = Modifier.weight(1f),
