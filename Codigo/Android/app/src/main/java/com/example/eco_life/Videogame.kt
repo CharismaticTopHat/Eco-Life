@@ -5,7 +5,12 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.graphicsLayer
 import com.example.eco_life.data.DBHandler
 import androidx.compose.ui.platform.LocalContext
+import android.media.MediaPlayer
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.material.ButtonDefaults
 
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 
 
@@ -35,6 +40,8 @@ import androidx.compose.ui.unit.sp
 import com.example.eco_life.ui.theme.EcoLifeTheme
 import kotlinx.coroutines.delay
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.text.font.FontFamily
 import kotlin.random.Random
 
 
@@ -43,10 +50,14 @@ import kotlin.random.Random
 
 class VideogameActivity : ComponentActivity() {
     private lateinit var dbHandler: DBHandler
+    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dbHandler = DBHandler(this)
+
+
+
 
         setContent {
             VideogameMenu(
@@ -55,13 +66,37 @@ class VideogameActivity : ComponentActivity() {
             )
         }
     }
+
+    // Music funciones
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer?.pause() // Pausa la música
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mediaPlayer?.start() // Reanuda la música
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer?.release() // Libera los recursos del MediaPlayer
+        mediaPlayer = null
+    }
 }
+
+
+
+
+
+
 
 
 
 
 @Composable
 fun GameScreen() {
+    //private var mediaPlayer: MediaPlayer? = null
 
     val context = LocalContext.current
     val dbHandler = remember { DBHandler(context) }
@@ -94,6 +129,67 @@ data class CarData(var row: Int, var column: Int)
 @Composable
 fun GridJuego(onGameOver: (Int) -> Unit)
 {
+
+    //SONIDOS
+    // Contexto para inicializar MediaPlayer
+    val context = LocalContext.current
+
+    // MediaPlayer para sonido de movimiento
+    val stepSoundPlayer = remember {
+        MediaPlayer.create(context, R.raw.steproad)
+    }
+
+    // MediaPlayer para el sonido de las basuras al recoger
+    val coinSoundPlayer = remember {
+        MediaPlayer.create(context, R.raw.popais)
+    }
+
+    // MediaPlayer para el sonido de las electricidad al recargar al bot
+    val PanelSoundPlayer = remember {
+        MediaPlayer.create(context, R.raw.electro)
+    }
+
+    // MediaPlayer para el sonido del depositar basura
+    val DepositSoundPlayer = remember {
+        MediaPlayer.create(context, R.raw.basurini)
+    }
+
+
+    // Inicializar MediaPlayer para música de fondo
+    val backgroundPlayer = remember {
+        MediaPlayer.create(context, R.raw.musicroads).apply {
+            isLooping = true
+            start()
+        }
+    }
+
+    val StreetgroundPlayer = remember {
+        MediaPlayer.create(context, R.raw.streets).apply {
+            isLooping = true
+            setVolume(0.05f, 0.05f) // Ajustar volumen (20% del máximo para ambos canales)
+            start()
+        }
+    }
+
+
+
+    // pa que se escuchen
+    DisposableEffect(Unit) {
+        onDispose {
+            DepositSoundPlayer.release()
+            PanelSoundPlayer.release()
+            coinSoundPlayer.release()
+            stepSoundPlayer.release()
+            backgroundPlayer.stop()
+            backgroundPlayer.release()
+            StreetgroundPlayer.stop()
+            StreetgroundPlayer.release()
+        }
+    }
+    //FIN SONIDOS
+    //FIN SONIDOS
+
+
     val gridWidth = 12 //width
     val tileSize = 40.dp //tamano de cada tile indivivual
 
@@ -117,16 +213,19 @@ fun GridJuego(onGameOver: (Int) -> Unit)
             painterResource(id = R.drawable.sprite_down_2)
         ),
         "up" to listOf(
-            painterResource(id = R.drawable.sprite_up_1),
-            painterResource(id = R.drawable.sprite_up_2)
+            painterResource(id = R.drawable.up1),
+            painterResource(id = R.drawable.up2),
+            painterResource(id = R.drawable.up3)
         ),
         "left" to listOf(
-            painterResource(id = R.drawable.sprite_left_1),
-            painterResource(id = R.drawable.sprite_left_2)
+            painterResource(id = R.drawable.izq1),
+            painterResource(id = R.drawable.izq2),
+            painterResource(id = R.drawable.izq3)
         ),
         "right" to listOf(
-            painterResource(id = R.drawable.sprite_right_1),
-            painterResource(id = R.drawable.sprite_right_2)
+            painterResource(id = R.drawable.side1),
+            painterResource(id = R.drawable.side2),
+            painterResource(id = R.drawable.side3)
         )
     )
 
@@ -161,7 +260,7 @@ fun GridJuego(onGameOver: (Int) -> Unit)
     )
 
     //basura png
-    val containerImage = painterResource(id = R.drawable.can1)
+    val containerImage = painterResource(id = R.drawable.basuracont)
 
     //arboles pngs
     val treeImages = listOf(
@@ -222,6 +321,7 @@ fun GridJuego(onGameOver: (Int) -> Unit)
                 // erificar colisiones con paneles
                 checkPanelCollision(playerX, playerY, panelData, energy, maxEnergy) { restoredEnergy ->
                     energy = restoredEnergy
+                    PanelSoundPlayer.start()
                 }
                 delay(200L)
             }
@@ -242,13 +342,20 @@ fun GridJuego(onGameOver: (Int) -> Unit)
                     playerY = newPlayerY
                 }
 
+                // Si el jugado se mueve reproducir sonido
+                if (newPlayerX != playerX || newPlayerY != playerY) {
+                    stepSoundPlayer.start() // Reproducir el sonido de paso
+                }
+
                 //Comprobar colisiones con monedas y contenedores
                 TrashCollision(playerX, playerY, coinData,basuralimit, basuracurrent) { collectedCoins ->
                     basuracurrent = collectedCoins
+                    coinSoundPlayer.start()
                 }
                 ContainerCollision(playerX, playerY, containerData, basuracurrent ) { depositedCoins ->
                     basuradepositada += depositedCoins
                     basuracurrent = 0 // Vaciar bolsa
+                    DepositSoundPlayer.start()
                 }
 
                 //colisinones coches
@@ -468,6 +575,7 @@ fun GridJuego(onGameOver: (Int) -> Unit)
 
 
 
+
         /*
         //jugador old
         Box(
@@ -479,7 +587,7 @@ fun GridJuego(onGameOver: (Int) -> Unit)
         */
 
 
-        //Barras UI de energía y basura en la esquina superior izquierda
+        //Barras UI de energia y basura
         Column(
             modifier = Modifier
                 .padding(8.dp)
@@ -618,6 +726,7 @@ fun checkPanelCollision(
     if (panelCollision) {
         val restoredEnergy = (currentEnergy + 20f).coerceAtMost(maxEnergy)
         onEnergyRestored(restoredEnergy)
+
         //se elimina el panel despues de ser usado
         panelData.removeIf { it.row == playerY && it.column == playerX }
     }
@@ -687,8 +796,23 @@ fun CarLayer(carData: List<CarData>, tileSize: Dp) {
 
 @Composable
 fun Car(tileSize: Dp, row: Int, column: Int) {
-    val carImage: Painter = painterResource(id = R.drawable.car10)
+    //lista coches
+    val carImages = listOf(
+        R.drawable.car10,
+        R.drawable.car2,
+        R.drawable.car3,
+        R.drawable.car4,
+        R.drawable.car5
+    )
 
+    //save estado
+    val carImageId by remember {
+        mutableStateOf(carImages.random()) //random car elect
+    }
+
+    val carImage: Painter = painterResource(id = carImageId)
+
+    //muestra imagen
     Image(
         painter = carImage,
         contentDescription = null,
@@ -700,6 +824,7 @@ fun Car(tileSize: Dp, row: Int, column: Int) {
             )
     )
 }
+
 
 
 
@@ -778,7 +903,7 @@ fun CoinBagProgressBar(basuracurrent: Int, basuralimit: Int) {
             modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth(progress)
-                .background(Color.Green, shape = CircleShape)
+                .background(Color.Yellow, shape = CircleShape)
         )
     }
 }
@@ -1197,32 +1322,100 @@ fun DirectionButton(imageResource: Int, onMove: () -> Unit, onStop: () -> Unit) 
 @Composable
 fun VideogameMenu(onStartGame: () -> Unit, dbHandler: DBHandler) {
     var highestScore by remember { mutableStateOf(0) }
+    var scoreMessage by remember { mutableStateOf("") }
 
-    //record base de datos
+    // Obtener la puntuacion más alta de la base de datos
     LaunchedEffect(Unit) {
         highestScore = dbHandler.getHighScore()
+        scoreMessage = getScoreMessage(highestScore)
     }
+
+
+    val verdeApp = Color(0, 154, 20)
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxSize()
+            .background(Color(0xFFE8F5E9)) // Fondo verde claro
     ) {
-        Text(
-            text = "Videojuego",
-            fontSize = 24.sp,
-            color = Color.Green,
-            modifier = Modifier.padding(16.dp)
-        )
-        Text(
-            text = "Récord: $highestScore",
-            fontSize = 20.sp,
-            color = Color.Black,
-            modifier = Modifier.padding(8.dp)
-        )
-        Button(onClick = onStartGame) {
-            Text(text = "Start Game")
+        // Header con fondo verde
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(verdeApp)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Videojuego",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                modifier = Modifier.weight(1f)
+            )
+            Image(
+                painter = painterResource(id = R.drawable.eco_espacio),
+                contentDescription = "Eco Espacio Logo",
+                modifier = Modifier.size(40.dp)
+            )
         }
+
+        // Contenido principal
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "Cleany Roads",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF388E3C), // Verde oscuro
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+            Text(
+                text = "Récord: $highestScore",
+                fontSize = 20.sp,
+                color = Color.Black,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                text = scoreMessage,
+                fontSize = 16.sp,
+                color = Color(0xFF1976D2), // Azul intenso
+                modifier = Modifier.padding(bottom = 24.dp)
+            )
+            Button(
+                onClick = onStartGame,
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth()
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = verdeApp) // Mismo color que el header
+            ) {
+                Text(
+                    text = "Start Game",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
+        }
+    }
+}
+
+// mensaje basado en el rango de puntuacion
+fun getScoreMessage(score: Int): String {
+    return when (score) {
+        in 10..20 -> "Lo equivalente a una bolsa"
+        in 21..30 -> "Lo equivalente a un cubo"
+        in 31..50 -> "Lo equivalente a un barril"
+        in 51..100 -> "Lo equivalente a un contenedor pequeño"
+        in 101..200 -> "Lo equivalente a un camión pequeño"
+        in 201..500 -> "Lo equivalente a un camión grande"
+        in 501..Int.MAX_VALUE -> "¡Eres un héroe del reciclaje!"
+        else -> "0 es 0"
     }
 }
