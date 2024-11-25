@@ -523,7 +523,7 @@ fun GridJuego(onGameOver: (Int) -> Unit)
             onMoveLeft = { direction = Pair(-1, 0) },
             onMoveRight = { direction = Pair(1, 0) },
             onMoveUp = { direction = Pair(0, -1) },
-            onMoveDown = { direction = Pair(0, 1) },
+            //onMoveDown = { direction = Pair(0, 1) },
             onStop = { direction = null }
         )
     }
@@ -1128,13 +1128,11 @@ fun LeafLayer(leafImages: List<Painter>) {
 
 //LEAFS
 //LEAFS Ending
-
 @Composable
 fun ControlButtons(
     onMoveLeft: () -> Unit,
     onMoveRight: () -> Unit,
     onMoveUp: () -> Unit,
-    onMoveDown: () -> Unit,
     onStop: () -> Unit
 ) {
     Column(
@@ -1166,13 +1164,9 @@ fun ControlButtons(
                 onStop = onStop
             )
         }
-        DirectionButton(
-            imageResource = R.drawable.down,
-            onMove = onMoveDown,
-            onStop = onStop
-        )
     }
 }
+
 
 
 @Composable
