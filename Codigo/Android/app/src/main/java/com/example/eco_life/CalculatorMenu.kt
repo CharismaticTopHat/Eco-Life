@@ -138,7 +138,6 @@ fun CalculatorMenu(navController: NavController) {
     val textHeight = textSize.value.dp
     val customColor = Color(30, 132, 73 )
     val buttonCornerRadius = 12.dp
-    val headerGreen = Color(17,109,29)
     var transportEmissions by remember { mutableStateOf(0.0) }
     var energyEmissions by remember { mutableStateOf(0.0) }
     var foodEmissions by remember { mutableStateOf(0.0) }
@@ -149,11 +148,12 @@ fun CalculatorMenu(navController: NavController) {
     val buttonsGreen = Color(0, 154, 20)
 
     LaunchedEffect(Unit) {
+        val currentDate = getCurrentDate()
         withContext(Dispatchers.IO) {
-            transportEmissions = getTotalEmissionsForTransport(dbHandler)
-            energyEmissions = getTotalEmissionsForEnergy(dbHandler)
-            foodEmissions = getTotalEmissionsForFood(dbHandler)
-            trashEmissions = getTotalEmissionsForTrash(dbHandler)
+            transportEmissions = getTotalEmissionsForTransport(dbHandler, currentDate)
+            energyEmissions = getTotalEmissionsForEnergy(dbHandler, currentDate)
+            foodEmissions = getTotalEmissionsForFood(dbHandler, currentDate)
+            trashEmissions = getTotalEmissionsForTrash(dbHandler, currentDate)
         }
     }
     Column(
@@ -733,23 +733,28 @@ fun CalculatorMenu(navController: NavController) {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getTotalEmissionsForTransport(dbHandler: DBHandler): Double {
-    return dbHandler.getEmissionsByType("Transport")
+fun getCurrentDate(): String {
+    return LocalDate.now().toString()
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getTotalEmissionsForEnergy(dbHandler: DBHandler): Double {
-    return dbHandler.getEmissionsByType("Energy")
+fun getTotalEmissionsForTransport(dbHandler: DBHandler, date: String): Double {
+    return dbHandler.getEmissionsByTypeAndDate("Transport", date)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getTotalEmissionsForFood(dbHandler: DBHandler): Double {
-    return dbHandler.getEmissionsByType("Food")
+fun getTotalEmissionsForEnergy(dbHandler: DBHandler, date: String): Double {
+    return dbHandler.getEmissionsByTypeAndDate("Energy", date)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getTotalEmissionsForTrash(dbHandler: DBHandler): Double {
-    return dbHandler.getEmissionsByType("Trash")
+fun getTotalEmissionsForFood(dbHandler: DBHandler, date: String): Double {
+    return dbHandler.getEmissionsByTypeAndDate("Food", date)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getTotalEmissionsForTrash(dbHandler: DBHandler, date: String): Double {
+    return dbHandler.getEmissionsByTypeAndDate("Trash", date)
 }
 
 @Composable
@@ -770,13 +775,13 @@ fun EmissionsLineGraph(dbHandler: DBHandler) {
                     circleRadius = 5f
                     setCircleColor(android.graphics.Color.RED)
                     mode = LineDataSet.Mode.CUBIC_BEZIER
-                    setDrawValues(false) // Optional: Hides value labels on points
+                    setDrawValues(false)
                 }
 
                 this.data = LineData(dataSet)
 
                 this.legend.apply {
-                    isEnabled = true // Show legend with label "Huella de Carbono (Kg)"
+                    isEnabled = true
                     verticalAlignment = Legend.LegendVerticalAlignment.TOP
                     horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
                     orientation = Legend.LegendOrientation.HORIZONTAL
@@ -805,7 +810,7 @@ fun EmissionsLineGraph(dbHandler: DBHandler) {
                     text = ""
                 }
 
-                this.setViewPortOffsets(32f, 64f, 32f, 128f) // Increase top offset for the legend
+                this.setViewPortOffsets(32f, 64f, 32f, 128f)
 
                 this.animateX(1000)
             }

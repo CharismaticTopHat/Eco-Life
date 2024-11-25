@@ -143,11 +143,11 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         return Pair(dates, emissions)
     }
 
-    fun getEmissionsByType(type: String): Double {
+    fun getEmissionsByTypeAndDate(type: String, date: String): Double {
         val db = this.readableDatabase
         val cursor = db.rawQuery(
-            "SELECT SUM(emissionFactor * emissionValue * hours) FROM emissions WHERE type = ?",
-            arrayOf(type)
+            "SELECT SUM(emissionFactor * emissionValue * hours) FROM emissions WHERE type = ? AND date = ?",
+            arrayOf(type, date)
         )
         var sum = 0.0
         if (cursor.moveToFirst()) {
